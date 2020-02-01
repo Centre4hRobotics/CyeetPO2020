@@ -17,7 +17,7 @@ import imutils
 import argparse
 
 from cscore import CameraServer, VideoSource, UsbCamera, MjpegServer, CvSource
-from networktables import NetworkTablesInstance
+from networktables import NetworkTables, NetworkTablesInstance
 import ntcore
 
 #   JSON format:
@@ -257,6 +257,7 @@ if __name__ == "__main__":
 
     # loop forever
     #print("Before loop")
+    visiontable = NetworkTables.getTable('Vision')
     while True:
         #print("In loop")
         # (cv_sink, output_stream, img)
@@ -311,11 +312,16 @@ if __name__ == "__main__":
                 if len(approx) == 8:
                     screenCnt = approx
                     color = (0,255,0)  
-                    print("x:", centerX-160)
+                    centerX = centerX - 160
+                    visiontable.putNumber('XCenter', centerX)
+                    visiontable.putNumber('YCenter', boundRect[1])
+                    visiontable.putBoolean('Found Contour', True)
+                    print("x:", centerX)
                     print("y:", boundRect[1])   
                                 
                 else:
                     color = (0,0,255)
+                    visiontable.putBoolean('Found Contour', False)
                 #Drawing Rectangle and cross arrow
                 cv2.rectangle(img, (boundRect[0], boundRect[1]), (boundRect[0]+boundRect[2], boundRect[1]+boundRect[3]), color)
                 cv2.line(img, line_point_1_right, line_point_1_left, color, 1)
