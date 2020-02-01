@@ -362,8 +362,8 @@ if __name__ == "__main__":
                 if len(recent_points) > RUNNING_AVERAGE_NUM:
                     recent_points.popleft()
 
-                visiontable.putNumber('XCenter', centerX)
-                visiontable.putNumber('YCenter', boundRect[1])
+                visiontable.putNumber('XCenter', round(centerX / CAMERA_WIDTH))
+                visiontable.putNumber('YCenter', round(boundRect[1] / CAMERA_HEIGHT))
                 visiontable.putBoolean('Found Contour', True)
             else:
                 visiontable.putBoolean('Found Contour', False)
@@ -376,6 +376,8 @@ if __name__ == "__main__":
 
             if len(recent_points) != 0:
                 average_point = [int(round(sum(x) / len(x))) for x in zip(*recent_points)]
+                visiontable.putNumber('Running XCenter', round(average_point[0] / CAMERA_WIDTH))
+                visiontable.putNumber('Running YCenter', round(average_point[1] / CAMERA_HEIGHT))
                 print("average: ({}, {})".format(average_point[0], average_point[1]))
                 cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (0,0,255), 1)
                 cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (0,0,255), 1)
