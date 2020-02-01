@@ -15,13 +15,16 @@ import numpy as np
 import cv2
 import imutils
 import argparse
-
 from functools import reduce
+from collections import deque
+
 from cscore import CameraServer, VideoSource, UsbCamera, MjpegServer, CvSource
 from networktables import NetworkTables, NetworkTablesInstance
 import ntcore
 
-RUNNING_AVERAGE_NUM = 5
+RUNNING_AVERAGE_NUM = 3
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 320
 #   JSON format:
 #   {
 #       "team": <team number>,
@@ -270,13 +273,12 @@ if __name__ == "__main__":
     # loop forever
     #print("Before loop")
     visiontable = NetworkTables.getTable('Vision')
-    Recent_Points = []
+    recent_points = deque(maxlen=RUNNING_AVERAGE_NUM + 1)
     while True:
         #print("In loop")
         # (cv_sink, output_stream, img)
-        for index, (cv_sink, output_stream, img) in enumerate(input_output[1:2]):
+        for index, (cv_sink, output_stream, img) in enumerate(input_output[:1]):
             time, img  = cv_sink.grabFrame(img)
-            
 
             #print('time: {}'.format(time))
             if time == 0:
@@ -286,30 +288,28 @@ if __name__ == "__main__":
 
             #Processing begins -Brayden-
             #converting to HSV & HSL
-            oversaturation_mask = cv2.inRange(img, (200, 200, 200), (255, 255, 255))
-            hsl = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
-            light_mask = cv2.inRange(hsl, (0, 0, 150), (0, 0, 255))
+            # oversaturation_mask = cv2.inRange(img, (200, 200, 200), (255, 255, 255))
+            # hsl = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+            # light_mask = cv2.inRange(hsl, (0, 0, 150), (0, 0, 255))
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             #Segmentation
             greenLow = (50, 53, 55)
             greenUp = (92, 255, 223) 
             green_mask = cv2.inRange(hsv, greenLow, greenUp)
 
-            mask = green_mask - light_mask - oversaturation_mask
+            mask = green_mask #- light_mask - oversaturation_mask
 
             #res = cv2.bitwise_and(img, img, mask=mask1)
 
             #Finding edges
             edged = cv2.Canny(mask, 30, 200)
             #getting Countors
-            cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            cnts = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
             cnts = sorted(cnts, key = cv2.contourArea, reverse = True)
             #Loop through contours
-            k = 0
             found_contour = None
             for c in cnts:
-                k = k+1
                 peri = cv2.arcLength(c, True)
                 approx = cv2.approxPolyDP(c, 0.02 * peri, True)
                 #Draw rectangle
@@ -357,24 +357,29 @@ if __name__ == "__main__":
                 cv2.line(img, line_point_1_right, line_point_1_left, color, 1)
                 cv2.line(img, line_point_2_top, line_point_2_bottom, color, 1)
                 cv2.line(img, (160, 240), (160, 0), (128,0,0))
-                Recent_Points.append((centerX, boundRect[1]))
+
+                recent_points.append((centerX, boundRect[1]))
+                if len(recent_points) > RUNNING_AVERAGE_NUM:
+                    recent_points.popleft()
+
                 visiontable.putNumber('XCenter', centerX)
                 visiontable.putNumber('YCenter', boundRect[1])
                 visiontable.putBoolean('Found Contour', True)
             else:
                 visiontable.putBoolean('Found Contour', False)
-                Recent_Points.append(None)
-            if len(Recent_Points) >= RUNNING_AVERAGE_NUM:
-                num_of_points = len(Recent_Points)
-                average_point = reduce(sum_of_points, Recent_Points)
-                Recent_Points.clear()
-                if average_point != None:
-                    average_point = (round(average_point[0] / num_of_points), round(average_point[1] / num_of_points))
-                    print("average: ({}, {})".format(average_point[0], average_point[1]))
-                    cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (255,0,0), 1)
-                    cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (255,0,0), 1)
+            # if len(Recent_Points) >= RUNNING_AVERAGE_NUM:
+            #     num_of_points = len(Recent_Points)
+            #     average_point = reduce(sum_of_points, Recent_Points)
                 
+            #     if average_point != None:
+            #         average_point = (round(average_point[0] / num_of_points), round(average_point[1] / num_of_points))
 
+            if len(recent_points) != 0:
+                average_point = [int(round(sum(x) / len(x))) for x in zip(*recent_points)]
+                print("average: ({}, {})".format(average_point[0], average_point[1]))
+                cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (0,0,255), 1)
+                cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (0,0,255), 1)
+                
                 
             output_stream.putFrame(img)
             input_output[index] = (cv_sink, output_stream, img)
