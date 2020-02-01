@@ -23,8 +23,8 @@ from networktables import NetworkTables, NetworkTablesInstance
 import ntcore
 
 RUNNING_AVERAGE_NUM = 3
-CAMERA_WIDTH = 640
-CAMERA_HEIGHT = 320
+CAMERA_WIDTH = None
+CAMERA_HEIGHT = None
 #   JSON format:
 #   {
 #       "team": <team number>,
@@ -264,6 +264,8 @@ if __name__ == "__main__":
 
     # start cameras
     for config in cameraConfigs:
+        CAMERA_HEIGHT = config.height
+        CAMERA_WIDTH = config.width
         cameras.append(startCamera(config))
 
     # start switched cameras
@@ -362,8 +364,8 @@ if __name__ == "__main__":
                 if len(recent_points) > RUNNING_AVERAGE_NUM:
                     recent_points.popleft()
 
-                visiontable.putNumber('XCenter', centerX / CAMERA_WIDTH)
-                visiontable.putNumber('YCenter', boundRect[1] / CAMERA_HEIGHT)
+                visiontable.putNumber('XCenter', centerX / (CAMERA_WIDTH / 2.0) - 1.0)
+                visiontable.putNumber('YCenter', boundRect[1] / (CAMERA_HEIGHT / 2.0) - 1.0)
                 visiontable.putBoolean('Found Contour', True)
             else:
                 visiontable.putBoolean('Found Contour', False)
@@ -376,8 +378,8 @@ if __name__ == "__main__":
 
             if len(recent_points) != 0:
                 average_point = [int(round(sum(x) / len(x))) for x in zip(*recent_points)]
-                visiontable.putNumber('Running XCenter', average_point[0] / CAMERA_WIDTH)
-                visiontable.putNumber('Running YCenter', average_point[1] / CAMERA_HEIGHT)
+                visiontable.putNumber('Running XCenter', average_point[0] / (CAMERA_WIDTH / 2.0) - 1.0)
+                visiontable.putNumber('Running YCenter', average_point[1] / (CAMERA_HEIGHT / 2.0) - 1.0)
                 print("average: ({}, {})".format(average_point[0], average_point[1]))
                 cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (0,0,255), 1)
                 cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (0,0,255), 1)
