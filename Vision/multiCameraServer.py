@@ -16,10 +16,12 @@ import cv2
 import imutils
 import argparse
 
+from functools import reduce
 from cscore import CameraServer, VideoSource, UsbCamera, MjpegServer, CvSource
 from networktables import NetworkTables, NetworkTablesInstance
 import ntcore
 
+RUNNING_AVERAGE_NUM = 5
 #   JSON format:
 #   {
 #       "team": <team number>,
@@ -230,6 +232,16 @@ def startSwitchedCamera(config):
 
     return server
 
+def sum_of_points(acc, new):
+    if new != None and acc != None:
+        return (new[0] + acc[0], new[1] + acc[1])
+    elif new == None and acc != None:
+        return acc
+    elif acc == None and new != None:
+        return new
+    else:
+        return None
+
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         configFile = sys.argv[1]
@@ -258,6 +270,7 @@ if __name__ == "__main__":
     # loop forever
     #print("Before loop")
     visiontable = NetworkTables.getTable('Vision')
+    Recent_Points = []
     while True:
         #print("In loop")
         # (cv_sink, output_stream, img)
@@ -291,9 +304,12 @@ if __name__ == "__main__":
             #getting Countors
             cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
-            cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]
+            cnts = sorted(cnts, key = cv2.contourArea, reverse = True)
             #Loop through contours
+            k = 0
+            found_contour = None
             for c in cnts:
+                k = k+1
                 peri = cv2.arcLength(c, True)
                 approx = cv2.approxPolyDP(c, 0.02 * peri, True)
                 #Draw rectangle
@@ -308,25 +324,57 @@ if __name__ == "__main__":
                 line_point_2_top = (centerX, boundRect[1] + 20)
                 line_point_2_bottom = (centerX, boundRect[1] - 20)
                 color = (0,0,0)
+                found_contour = (centerX, boundRect)
+                break
                 #Green for 8 sides red for not 8
-                if len(approx) == 8:
-                    screenCnt = approx
-                    color = (0,255,0)  
-                    centerX = centerX - 160
-                    visiontable.putNumber('XCenter', centerX)
-                    visiontable.putNumber('YCenter', boundRect[1])
-                    visiontable.putBoolean('Found Contour', True)
-                    print("x:", centerX)
-                    print("y:", boundRect[1])   
+                
+                    # screenCnt = approx
+                    # color = (0,255,0)  
+                    # centerX = centerX - 160
+                    
+                    # print("x:", centerX)
+                    # print("y:", boundRect[1])   
                                 
-                else:
-                    color = (0,0,255)
-                    visiontable.putBoolean('Found Contour', False)
+                # else:
+                    # color = (0,0,255)
+                    # visiontable.putBoolean('Found Contour', False)
                 #Drawing Rectangle and cross arrow
+                # Average[k] = 
+                
+                #Display frame to screen
+                
+            
+            if found_contour != None:
+                centerX = found_contour[0]
+                boundRect = found_contour[1]
+                color = (0, 255, 0)
+                line_point_1_right = (centerX + 20, boundRect[1])
+                line_point_1_left = (centerX - 20, boundRect[1])
+                line_point_2_top = (centerX, boundRect[1] + 20)
+                line_point_2_bottom = (centerX, boundRect[1] - 20)
+
                 cv2.rectangle(img, (boundRect[0], boundRect[1]), (boundRect[0]+boundRect[2], boundRect[1]+boundRect[3]), color)
                 cv2.line(img, line_point_1_right, line_point_1_left, color, 1)
                 cv2.line(img, line_point_2_top, line_point_2_bottom, color, 1)
-                cv2.line(img, (160, 240), (160, 0), (128,0,0)) 
-                #Display frame to screen
-                output_stream.putFrame(img)
-                input_output[index] = (cv_sink, output_stream, img)
+                cv2.line(img, (160, 240), (160, 0), (128,0,0))
+                Recent_Points.append((centerX, boundRect[1]))
+                visiontable.putNumber('XCenter', centerX)
+                visiontable.putNumber('YCenter', boundRect[1])
+                visiontable.putBoolean('Found Contour', True)
+            else:
+                visiontable.putBoolean('Found Contour', False)
+                Recent_Points.append(None)
+            if len(Recent_Points) >= RUNNING_AVERAGE_NUM:
+                num_of_points = len(Recent_Points)
+                average_point = reduce(sum_of_points, Recent_Points)
+                Recent_Points.clear()
+                if average_point != None:
+                    average_point = (round(average_point[0] / num_of_points), round(average_point[1] / num_of_points))
+                    print("average: ({}, {})".format(average_point[0], average_point[1]))
+                    cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (255,0,0), 1)
+                    cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (255,0,0), 1)
+                
+
+                
+            output_stream.putFrame(img)
+            input_output[index] = (cv_sink, output_stream, img)
