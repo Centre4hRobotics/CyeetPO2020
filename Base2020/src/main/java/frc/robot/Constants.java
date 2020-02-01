@@ -18,7 +18,8 @@ public final class Constants {
     public static final int kLMCAN = 1;
     public static final int kLFCAN = 2;
 
-    public static final boolean squareArcadeInputs = false;
+    public static final boolean squareSpeedInput = false;
+    public static final boolean squareRotInput = true;
     public static final double maxArcadeOutput = 1.0;
 
     /*public static final int kLeftMotor1Port = 0;

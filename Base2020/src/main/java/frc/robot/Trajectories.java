@@ -38,12 +38,23 @@ public final class Trajectories {
     );
     
     public static Trajectory straightBackTrajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 180, new Rotation2d(0)),
+        new Pose2d(6, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(3, 180)
+            new Translation2d(3, -0.5)
         ),
-        new Pose2d(6, 180, new Rotation2d(0)),
+        new Pose2d(0, 0, new Rotation2d(0)),
             // Pass config
-        config.setReversed(true)
+        config.setReversed(true) 
+    );
+
+    public static Trajectory diamond = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0,new Rotation2d(0)),
+    List.of(
+        new Translation2d(1,0.5),
+        new Translation2d(2,0),
+        new Translation2d(1,-0.5)
+    ),
+    new Pose2d(0,0,new Rotation2d(90)),
+    config.setReversed(false) 
     );
 }

@@ -147,9 +147,11 @@ public class Drive extends SubsystemBase {
         zRotation = MathUtil.clamp(zRotation, -1.0, 1.0);
         zRotation = Math.abs(zRotation)<0.2 ? 0:zRotation;
 
-        if (DriveConstants.squareArcadeInputs) {
-        xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
+        if (DriveConstants.squareRotInput) {
         zRotation = Math.copySign(zRotation * zRotation, zRotation);
+        }
+        if (DriveConstants.squareSpeedInput) {
+          xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
         }
 
         double leftMotorOutput;
