@@ -245,6 +245,9 @@ def sum_of_points(acc, new):
     else:
         return None
 
+def estimate_distance(pixels_from_top):
+    return 8.59 + (0.0233 * pixels_from_top) + (3.05e-5 * (pixels_from_top ** 2)) + (2.2e-7 * (pixels_from_top ** 3))
+
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         configFile = sys.argv[1]
@@ -273,7 +276,6 @@ if __name__ == "__main__":
         startSwitchedCamera(config)
 
     # loop forever
-    #print("Before loop")
     visiontable = NetworkTables.getTable('Vision')
     recent_points = deque(maxlen=RUNNING_AVERAGE_NUM + 1)
     while True:
@@ -301,63 +303,59 @@ if __name__ == "__main__":
 
             mask = green_mask #- light_mask - oversaturation_mask
 
-            #res = cv2.bitwise_and(img, img, mask=mask1)
-
             #Finding edges
             edged = cv2.Canny(mask, 30, 200)
+
             #getting Countors
             cnts = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
             cnts = sorted(cnts, key = cv2.contourArea, reverse = True)
+          
             #Loop through contours
             found_contour = None
             for c in cnts:
                 peri = cv2.arcLength(c, True)
                 approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-                #Draw rectangle
+
+                #Numerical rectangle arround green shape (Used later to find top center)
                 boundRect = cv2.boundingRect(approx)
                 start = (boundRect[0], boundRect[1])
                 end = (boundRect[0] + boundRect[2], boundRect[1] + boundRect[3])
-                #Finding the centerX
+
+                #Finding the centerX (Finding the center of the rectangle [X value])
                 centerX = int((start[0] + end[0])/2)
-                #Bounding rectangle
+
+                #Bounding rectangle (We specify the points of the rectangle)
                 line_point_1_right = (centerX + 20, boundRect[1])
                 line_point_1_left = (centerX - 20, boundRect[1])
                 line_point_2_top = (centerX, boundRect[1] + 20)
                 line_point_2_bottom = (centerX, boundRect[1] - 20)
                 color = (0,0,0)
+
+                #Finding the center point (Center hole)
                 found_contour = (centerX, boundRect)
                 break
-                #Green for 8 sides red for not 8
                 
-                    # screenCnt = approx
-                    # color = (0,255,0)  
-                    # centerX = centerX - 160
-                    
-                    # print("x:", centerX)
-                    # print("y:", boundRect[1])   
-                                
-                # else:
-                    # color = (0,0,255)
-                    # visiontable.putBoolean('Found Contour', False)
-                #Drawing Rectangle and cross arrow
-                # Average[k] = 
-                
-                #Display frame to screen
-                
-            
+            # If there is a Contour countinue
             if found_contour != None:
                 centerX = found_contour[0]
                 boundRect = found_contour[1]
                 color = (0, 255, 0)
+
+                # Defining Edge points of the Rectangle
                 line_point_1_right = (centerX + 20, boundRect[1])
                 line_point_1_left = (centerX - 20, boundRect[1])
                 line_point_2_top = (centerX, boundRect[1] + 20)
                 line_point_2_bottom = (centerX, boundRect[1] - 20)
 
+                # Drawing Rectangle arround shape
                 cv2.rectangle(img, (boundRect[0], boundRect[1]), (boundRect[0]+boundRect[2], boundRect[1]+boundRect[3]), color)
+
+                # Drawing Cross arrow on Center point
                 cv2.line(img, line_point_1_right, line_point_1_left, color, 1)
                 cv2.line(img, line_point_2_top, line_point_2_bottom, color, 1)
+
+                #Line in the middle of the screen
                 cv2.line(img, (160, 240), (160, 0), (128,0,0))
 
                 recent_points.append((centerX, boundRect[1]))
@@ -367,6 +365,8 @@ if __name__ == "__main__":
                 visiontable.putNumber('XCenter', centerX / (CAMERA_WIDTH / 2.0) - 1.0)
                 visiontable.putNumber('YCenter', boundRect[1] / (CAMERA_HEIGHT / 2.0) - 1.0)
                 visiontable.putBoolean('Found Contour', True)
+
+            #If no Countors then prevent a error or crash
             else:
                 visiontable.putBoolean('Found Contour', False)
             # if len(Recent_Points) >= RUNNING_AVERAGE_NUM:
@@ -381,6 +381,7 @@ if __name__ == "__main__":
                 visiontable.putNumber('Running XCenter', average_point[0] / (CAMERA_WIDTH / 2.0) - 1.0)
                 visiontable.putNumber('Running YCenter', average_point[1] / (CAMERA_HEIGHT / 2.0) - 1.0)
                 print("average: ({}, {})".format(average_point[0], average_point[1]))
+                print("Estimated Distance: {}".format(estimate_distance(average_point[1])))
                 cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (0,0,255), 1)
                 cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (0,0,255), 1)
                 
