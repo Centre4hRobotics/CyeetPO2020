@@ -58,6 +58,15 @@ public final class Constants {
     public static final double kDDriveVel = 0.0;
   }
 
+  public static final class FeederConstants {
+    public static final int kFeederCAN = 1;   //We don't know what it is yet
+    public static final int kSensorDIO = 1;   //We also don't know what this is yet
+  }
+
+  public static final class IntakeConstants {
+    public static final int kIntakeCAN = 1;   //We don't know what it is yet
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
   }

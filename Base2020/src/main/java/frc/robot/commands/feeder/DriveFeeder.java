@@ -31,7 +31,7 @@ public class DriveFeeder extends CommandBase{
 
     @Override
     public void end (boolean interrupted) {
-        
+      feeder.setSpeed(0.0);
     }
 
     @Override
