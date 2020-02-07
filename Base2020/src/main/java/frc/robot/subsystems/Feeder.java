@@ -19,7 +19,7 @@ public class Feeder extends SubsystemBase
   private TalonSRX feederMotor;
 
   public Feeder() {
-    feederMotor = new TalonSRX(FeederConstants.feederMotorPort);
+    feederMotor = new TalonSRX(FeederConstants.kFeederCAN);
   }
 
   public void setSpeed (double speed)

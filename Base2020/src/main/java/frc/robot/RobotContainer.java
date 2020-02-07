@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
+import frc.robot.Pneumatics;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -28,8 +29,11 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final Drive m_drive = new Drive();
-  public static NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
+  private final Drive m_drive;
+  private final Pneumatics p_pneumatics;
+  private final Shooter m_shooter;
+  private final Spinner m_spinner;
+  public static NetworkTableInstance ntinst;
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -38,9 +42,19 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+    ntinst = NetworkTableInstance.getDefault();
+    p_pneumatics = new Pneumatics();
+
+    m_spinner = new Spinner(p_pneumatics);
+    m_spinner.setDefaultCommand(null);
+    
+    m_shooter = new Shooter (p_pneumatics);
+    m_shooter.setDefaultCommand(null);
+
+    m_drive = new Drive();
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, m_driverController, 1.0));
+
+    configureButtonBindings();
   }
 
   public void robotInit () {
