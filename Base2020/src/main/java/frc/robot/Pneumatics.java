@@ -9,6 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.Constants.PneumaticConstants;
 
 /**
  * General pneumatics for all subsystems, owns compressor and solenoids
@@ -16,20 +18,32 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class Pneumatics {
 
   private Compressor pcm;
-  private DoubleSolenoid spinoid;
+  private DoubleSolenoid climboid;
+  private Solenoid intakoid, spinoid, shootoid;
 
   public Pneumatics () {
-      spinoid = new DoubleSolenoid(1,2);
+      climboid = new DoubleSolenoid(PneumaticConstants.kClimbChannels[0], PneumaticConstants.kClimbChannels[1]);
+      intakoid = new Solenoid(PneumaticConstants.kIntakeChannel);
+      spinoid = new Solenoid(PneumaticConstants.kSpinChannel);
+      shootoid = new Solenoid(PneumaticConstants.kShootChannel);
       pcm = new Compressor();
       pcm.setClosedLoopControl(true);
       System.out.println("Compressor Enabled: " + pcm.enabled());
   }
 
-  public void setSpinState (DoubleSolenoid.Value state) {
-      spinoid.set(state);
+  public void setSpinState (boolean state) {
+    spinoid.set(state);
   }
 
-  public void setShootState (DoubleSolenoid.Value state) {
-     spinoid.set(state);
+  public void setShootState (boolean state) {
+    shootoid.set(state);
+  }
+
+  public void setIntakeState (boolean state) {
+    intakoid.set(state);
+  }
+
+  public void setClimbState (DoubleSolenoid.Value state) {
+    climboid.set(state);
   }
 }

@@ -64,10 +64,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void extend() {
-    p.setShootState(DoubleSolenoid.Value.kForward);
+    p.setShootState(true);
   }
   public void retract() {
-    p.setShootState(DoubleSolenoid.Value.kReverse);
+    p.setShootState(false);
   }
 
   public double getEncoderPosition (int encoder) {
@@ -88,6 +88,7 @@ public class Shooter extends SubsystemBase {
     return 0;
   }
 
+  //Can make it so setting individual motors also happens, but seems dangerous
   public void setSpeed (/*int motor, */double speed) {
     motor1.set(-1*speed);
     motor2.set(speed);

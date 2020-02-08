@@ -17,16 +17,10 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Pneumatics;
 import frc.robot.Constants.SpinnerConstants;
 
@@ -94,11 +88,11 @@ public class Spinner extends SubsystemBase {
   }
 
   public void extend () {
-      p.setSpinState(DoubleSolenoid.Value.kForward);
+      p.setSpinState(true);
   }
 
   public void retract () {
-      p.setSpinState(DoubleSolenoid.Value.kReverse);
+      p.setSpinState(false);
   }
 
   /*public void updateShuffleWanted (String wanted) {
