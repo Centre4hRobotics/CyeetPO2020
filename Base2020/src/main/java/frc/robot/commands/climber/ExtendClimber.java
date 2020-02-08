@@ -28,7 +28,7 @@ public class ExtendClimber extends CommandBase{
 
     @Override
     public void end (boolean interrupted) {
-      climber.pistonOff();
+   
     }
 
     @Override
