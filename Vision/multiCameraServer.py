@@ -383,8 +383,6 @@ if __name__ == "__main__":
                 print("average: ({}, {})".format(average_point[0], average_point[1]))
                 print("Estimated Distance: {}".format(estimate_distance(average_point[1])))
                 visiontable.putNumber('Estimated Distance', (estimate_distance(average_point[1])))
-                cv2.line(img, (average_point[0] + 20, average_point[1]),  (average_point[0] - 20, average_point[1]), (0,0,255), 1)
-                cv2.line(img,(average_point[0], average_point[1] + 20), (average_point[0], average_point[1] - 20) , (0,0,255), 1)
                 
                 
             output_stream.putFrame(img)
