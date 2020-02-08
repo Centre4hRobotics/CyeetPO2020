@@ -36,7 +36,7 @@ public class Spinner extends SubsystemBase {
   private ColorSensorV3 colorSensor;
   private ColorMatch colorMatcher;
   private ShuffleboardTab colorTab;
-  private NetworkTableEntry colorFound, colorWantedFound, colorWanted, confidence, colorOut;
+  private NetworkTableEntry colorFound, colorWantedString, colorWanted, confidence, colorOut, colorFoundString /*, colorWantedFound*/;
   private SimpleWidget colorFoundWidget, colorWantedWidget;
 
   public Spinner (Pneumatics pcm) {
@@ -67,20 +67,22 @@ public class Spinner extends SubsystemBase {
         //          ______
       colorFoundWidget = colorTab.add("Color Seen", false);
       colorFoundWidget.withProperties(Map.of("colorWhenFalse", "black"))
-                        .withPosition(1,0);
+                        .withPosition(1,0).withSize(1, 1);
       colorFound = colorFoundWidget.getEntry();
 
         //Position: X_____
         //          ______
       colorWantedWidget = colorTab.add("Color Wanted", false);
       colorWantedWidget.withProperties(Map.of("colorWhenFalse", "black"))
-                        .withPosition(0,0);
+                        .withPosition(0,0).withSize(1, 1);
       colorWanted = colorWantedWidget.getEntry();
     
       //Set positions for these three
-      colorWantedFound = colorTab.add("Has Wanted Color Been Found", false).withProperties(Map.of("colorWhenFalse", "black", "colorWhenTrue", "white")).getEntry();
-      confidence = colorTab.add("Confidence", "0").getEntry();
-      colorOut = colorTab.add("Color: ", ".").getEntry();
+      //colorWantedStringFound = colorTab.add("Has Wanted Color Been Found", false).withProperties(Map.of("colorWhenFalse", "black", "colorWhenTrue", "white")).getEntry();
+      confidence = colorTab.add("Confidence", "0").withPosition(2,0).withSize(2, 1).getEntry(); //2wide
+      colorOut = colorTab.add("Color: ", ".").withPosition(0,1).withSize(3, 1).getEntry(); //3wide
+      colorFoundString = colorTab.add("Color seen String", "black").withPosition(3,1).withSize(2, 1).getEntry(); //2wide
+      colorWantedString = colorTab.add("Color wanted string", "black").withPosition(5,1).withSize(2, 1).getEntry(); //2wide
   }
 
   public void setSpeed (double speed) {
@@ -95,26 +97,40 @@ public class Spinner extends SubsystemBase {
       p.setSpinState(false);
   }
 
-  /*public void updateShuffleWanted (String wanted) {
-      colorWantedWidget.withProperties(Map.of("colorWhenTrue", wanted));
-      colorWanted.setBoolean(true);
-  }
-
-  public void updateShuffleFound (String found) {
-
-  }*/
-
   //Transfer these to separate methods so it is not always necessary to update all of them. 
   //Alternatively, simply send in the raw color output and calculate the rest here.
-  public void updateShuffle(boolean wantedFound, String colorFound, String wanted, double conf, Color colorOut)
+  private void updateShuffle(String colorFound, String wanted, double conf, Color colorOut)
   {
-    colorWantedFound.setBoolean(wantedFound);
     colorFoundWidget.withProperties(Map.of("colorWhenTrue", colorFound));
     this.colorFound.setBoolean(true);
-    colorWanted.setString(wanted);
+    colorWantedWidget.withProperties(Map.of("colorWhenTrue", wanted));
+    this.colorWanted.setBoolean(true);
+    colorWantedString.setString(wanted);
     confidence.setString("" + conf);
     this.colorOut.setString("Blue: " + colorOut.blue + " Green: " + colorOut.green + " Red: " + colorOut.red);
+    colorFoundString.setString(colorFound);
   }
+
+  public void calculateShuffle (String wanted, Color found)
+  {
+    found = getColorSensor().getColor();
+    ColorMatchResult colorResult = getColorMatcher().matchClosestColor(found);
+    String colorOutput =  getColorString(colorResult);
+    boolean wantedFound = colorOutput != "black" && colorOutput.equals(wanted);
+    updateShuffle(colorOutput, wanted, colorResult.confidence, found);
+  }
+
+  public String getCurrentColor()
+  {
+    return colorFoundString.getString("black");
+  }
+
+  public String getColorWanted ()
+  {
+    return colorWantedString.getString("black");
+  }
+
+  //maybe add network tables for colorFound and wanted
 
   //Color Getters
 

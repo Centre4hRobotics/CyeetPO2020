@@ -28,11 +28,11 @@ public class RetractClimber extends CommandBase{
 
     @Override
     public void end (boolean interrupted) {
-      climber.pistonOff();
+      
     }
 
     @Override
     public boolean isFinished () {
-        return false;
+        return true;
     }
 }
