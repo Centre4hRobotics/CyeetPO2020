@@ -116,7 +116,7 @@ public class Spinner extends SubsystemBase {
     found = getColorSensor().getColor();
     ColorMatchResult colorResult = getColorMatcher().matchClosestColor(found);
     String colorOutput =  getColorString(colorResult);
-    boolean wantedFound = colorOutput != "black" && colorOutput.equals(wanted);
+   // boolean wantedFound = colorOutput != "black" && colorOutput.equals(wanted);
     updateShuffle(colorOutput, wanted, colorResult.confidence, found);
   }
 
