@@ -28,12 +28,17 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  
   // The robot's subsystems
   private final Drive m_drive;
-  private final Pneumatics p_pneumatics;
   private final Shooter m_shooter;
   private final Spinner m_spinner;
+  private final Intake m_intake;
+  private final Feeder m_feeder;
+  private final Climber m_climber;
+
   public static NetworkTableInstance ntinst;
+  private final Pneumatics p_pneumatics;
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -50,6 +55,15 @@ public class RobotContainer {
     
     m_shooter = new Shooter (p_pneumatics);
     m_shooter.setDefaultCommand(null);
+
+    m_climber = new Climber (p_pneumatics);
+    m_climber.setDefaultCommand(null);
+
+    m_intake = new Intake ();
+    m_intake.setDefaultCommand(null);
+
+    m_feeder = new Feeder ();
+    m_feeder.setDefaultCommand(null);
 
     m_drive = new Drive();
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, m_driverController, 1.0));

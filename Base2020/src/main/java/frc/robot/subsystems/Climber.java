@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants.ClimberConstants; 
+import frc.robot.Pneumatics; 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 
 public class Climber extends SubsystemBase {
   /**
@@ -20,22 +23,38 @@ public class Climber extends SubsystemBase {
 
   private TalonSRX climberL;
   private TalonSRX climberR;
+  private Pneumatics p;
 
-  public Climber() {
+  public Climber(Pneumatics pneumatics) {
     climberL = new TalonSRX(ClimberConstants.kClimberLCAN);
     climberR = new TalonSRX(ClimberConstants.kClimberRCAN);
-
+    p = pneumatics;
   }
   
   public void setRSpeed(double speed)
   {
-    climberR.set(speed);
+    climberR.set(ControlMode.Velocity, speed);
   }  
 
   public void setLSpeed(double speed)
   {
-    climberL.set(speed);
+    climberL.set(ControlMode.Velocity, speed);
   }  
+
+  public void extend()
+  {
+  p.setClimbState(DoubleSolenoid.Value.kForward);
+  }
+
+  public void retract()
+  {
+  p.setClimbState(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void pistonOff()
+  {
+  p.setClimbState(DoubleSolenoid.Value.kOff);
+  }
 
   @Override
   public void periodic() {
