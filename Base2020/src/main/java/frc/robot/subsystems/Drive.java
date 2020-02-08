@@ -113,22 +113,26 @@ public class Drive extends SubsystemBase {
     entries.put("Pose", tab.add("Pose", getPose().toString()).getEntry());
   }
 
+  private void updateShuffleboardMap() {
+    entries.get("LeftOutput").setNumber(mLeftMaster.getAppliedOutput());
+    entries.get("RightOutput").setNumber(mRightMaster.getAppliedOutput());
+    entries.get("LeftVoltage").setNumber(mLeftMaster.getBusVoltage());
+    entries.get("RightVoltage").setNumber(mRightMaster.getBusVoltage());
+    entries.get("LeftEncoder").setNumber(getEncoderPosition(Encoder.LEFT));
+    entries.get("RightEncoder").setNumber(getEncoderPosition(Encoder.RIGHT));
+    entries.get("Pose").setString(getPose().toString());
+    entries.get("RightWheelSpeed").setNumber(getWheelSpeeds().rightMetersPerSecond);
+    entries.get("LeftWheelSpeed").setNumber(getWheelSpeeds().leftMetersPerSecond);
+    entries.get("NavX Yaw").setNumber(navx.getYaw());
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(Rotation2d.fromDegrees(getHeading()), getEncoderPosition(Encoder.LEFT),
                       getEncoderPosition(Encoder.RIGHT));
     if (DriveConstants.testMode) {
-        entries.get("LeftOutput").setNumber(mLeftMaster.getAppliedOutput());
-        entries.get("RightOutput").setNumber(mRightMaster.getAppliedOutput());
-        entries.get("LeftVoltage").setNumber(mLeftMaster.getBusVoltage());
-        entries.get("RightVoltage").setNumber(mRightMaster.getBusVoltage());
-        entries.get("LeftEncoder").setNumber(getEncoderPosition(Encoder.LEFT));
-        entries.get("RightEncoder").setNumber(getEncoderPosition(Encoder.RIGHT));
-        entries.get("Pose").setString(getPose().toString());
-        entries.get("RightWheelSpeed").setNumber(getWheelSpeeds().rightMetersPerSecond);
-        entries.get("LeftWheelSpeed").setNumber(getWheelSpeeds().leftMetersPerSecond);
-        entries.get("NavX Yaw").setNumber(navx.getYaw());
+        updateShuffleboardMap();
     }
   }
 
