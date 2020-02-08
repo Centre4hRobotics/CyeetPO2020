@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Pneumatics;
 import frc.robot.Constants.IntakeConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -17,9 +18,19 @@ public class Intake extends SubsystemBase
 { 
 
   private VictorSPX intakeMotor;
+  private Pneumatics p;
 
-  public Intake() {
+  public Intake(Pneumatics pneumatics) {
+    this.p = pneumatics;
     intakeMotor = new VictorSPX(IntakeConstants.kIntakeCAN);
+  }
+
+  public void extend () {
+    p.setIntakeState(true);
+  }
+
+  public void retract () {
+    p.setIntakeState(false);
   }
 
   public void setSpeed (double speed)

@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.*;
 import frc.robot.commands.drive.*;
+import frc.robot.commands.feeder.*;
+import frc.robot.commands.spinner.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.shooter.*;
+import frc.robot.commands.climber.*;
 import frc.robot.subsystems.*;
 import frc.robot.Pneumatics;
 
@@ -41,12 +47,16 @@ public class RobotContainer {
   private final Pneumatics p_pneumatics;
 
   // The driver's controller
-  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController c_driver;
+  private final Joystick c_function1, c_function2;
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    c_driver = new XboxController(OIConstants.kDriverControllerPort);
+    c_function1 = new Joystick(OIConstants.kFunctionControllerPorts[0]);
+    c_function2 = new Joystick(OIConstants.kFunctionControllerPorts[1]); 
     ntinst = NetworkTableInstance.getDefault();
     p_pneumatics = new Pneumatics();
 
@@ -59,14 +69,14 @@ public class RobotContainer {
     m_climber = new Climber (p_pneumatics);
     m_climber.setDefaultCommand(null);
 
-    m_intake = new Intake ();
+    m_intake = new Intake (p_pneumatics);
     m_intake.setDefaultCommand(null);
 
     m_feeder = new Feeder ();
     m_feeder.setDefaultCommand(null);
 
     m_drive = new Drive();
-    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, m_driverController, 1.0));
+    m_drive.setDefaultCommand(new ArcadeDrive(m_drive, c_driver, 1.0));
 
     configureButtonBindings();
   }
@@ -84,8 +94,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-      new JoystickButton(m_driverController, Button.kA.value)
+      new JoystickButton(c_driver, Button.kA.value)
         .whenPressed (new ZeroPosition(m_drive));
+
+
+      new JoystickButton(c_function1, 1).whenPressed(new FixedFeeder(m_feeder, 0.3));
+      new JoystickButton(c_function1, 9).whenPressed(new FixedFeeder(m_feeder, -0.3));
+
+      new JoystickButton(c_function1, 4).whenPressed(new DriveSpinner(m_spinner, 0.3));
+      new JoystickButton(c_function1, 5).whenPressed(new DriveSpinner(m_spinner, -0.3));
+      new JoystickButton(c_function1, 6).whenPressed(new RetractSpinnerArm(m_spinner));
+      new JoystickButton(c_function1, 7).whenPressed(new ExtendSpinnerArm(m_spinner));
+
+      new JoystickButton(c_function2, 1).whenPressed(new DriveIntake(m_intake, 0.3));
+      new JoystickButton(c_function2, 2).whenPressed(new DriveIntake(m_intake, -0.3));
+      new JoystickButton(c_function1, 8).whenPressed(new RetractIntake(m_intake));
+      new JoystickButton(c_function2, 3).whenPressed(new ExtendIntake(m_intake));
   }
 
 
