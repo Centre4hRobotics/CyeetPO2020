@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
 
 
-public class DriveFeeder extends CommandBase{
+public class FixedFeeder extends CommandBase{
 
   private Feeder feeder;
   private double speed;
-    public DriveFeeder (Feeder feederUsed, double speed) {
+    public FixedFeeder (Feeder feederUsed, double speed) {
       feeder = feederUsed;
       this.speed = speed;
       addRequirements(feeder);
