@@ -34,10 +34,6 @@ public class TurnToColor extends CommandBase {
   {
     // Color Finding Code
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5a8a49782e07cfe44cfa03394de92b84455c3bdb
     if (spinner.getCurrentColor().equals(spinner.getColorWanted()))
     {
       Timer.delay(0.05);
