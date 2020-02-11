@@ -105,6 +105,7 @@ public class Drive extends SubsystemBase {
      
   }
 
+  //make hashmap hold widget instead of entry, get entry when needed
   private void initShuffleboardMap() {
     entries = new HashMap<String, NetworkTableEntry> (12);
     for (int i = 0; i<intEntryNames.length; i++) {

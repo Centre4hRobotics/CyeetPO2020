@@ -20,7 +20,7 @@ public class IntakeManual extends CommandBase {
   private Intake intake;
   private XboxController xbc;
 
-  public IntakeManual (Intake intakeUsed, XboxController controller, double speed) {
+  public IntakeManual (Intake intakeUsed, XboxController controller) {
     intake = intakeUsed;
     xbc = controller;
     addRequirements(intake);
