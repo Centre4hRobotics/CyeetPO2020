@@ -9,8 +9,6 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.Robot;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
@@ -21,12 +19,10 @@ public class IntakeManual extends CommandBase {
 
   private Intake intake;
   private XboxController xbc;
-  private double speed;
 
   public IntakeManual (Intake intakeUsed, XboxController controller, double speed) {
     intake = intakeUsed;
     xbc = controller;
-    this.speed = speed;
     addRequirements(intake);
   }
 

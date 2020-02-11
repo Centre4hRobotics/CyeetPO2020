@@ -67,7 +67,7 @@ public class RobotContainer {
     m_shooter.setDefaultCommand(null);
 
     m_climber = new Climber (p_pneumatics);
-    m_climber.setDefaultCommand(null);
+    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 0.4));
 
     m_intake = new Intake (p_pneumatics);
     m_intake.setDefaultCommand(null);
@@ -94,9 +94,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-      new JoystickButton(c_driver, Button.kA.value)
-        .whenPressed (new ZeroPosition(m_drive));
-
+      new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
 
       new JoystickButton(c_function1, 1).whenPressed(new FixedFeeder(m_feeder, 0.3));
       new JoystickButton(c_function1, 9).whenPressed(new FixedFeeder(m_feeder, -0.3));
@@ -110,6 +108,16 @@ public class RobotContainer {
       new JoystickButton(c_function2, 2).whenPressed(new DriveIntake(m_intake, -0.3));
       new JoystickButton(c_function1, 8).whenPressed(new RetractIntake(m_intake));
       new JoystickButton(c_function2, 3).whenPressed(new ExtendIntake(m_intake));
+
+      new JoystickButton(c_function1, 10).whenPressed(new RetractClimber(m_climber));
+      new JoystickButton(c_function2, 9).whenPressed(new ClimberPistonOff(m_climber));
+      new JoystickButton(c_function2, 10).whenPressed(new ExtendClimber(m_climber));
+
+      new JoystickButton(c_function2, 4).whenPressed(new ShooterExtend(m_shooter));
+      new JoystickButton(c_function2, 5).whenPressed(new ShooterRetract(m_shooter));
+      new JoystickButton(c_function2, 6).whenPressed(new DriveShooterFixed(m_shooter, 0.6));
+      new JoystickButton(c_function2, 7).whenPressed(new DriveShooterFixed(m_shooter, 0.9));
+      new JoystickButton(c_function2, 8).whenPressed(new DriveShooterFixed(m_shooter, 1.0));
   }
 
 
