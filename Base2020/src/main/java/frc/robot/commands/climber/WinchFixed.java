@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class FixedWinchSpeed extends CommandBase{
+public class WinchFixed extends CommandBase{
 
   private Climber climber;
   private double speed;
-    public FixedWinchSpeed (Climber climberUsed, double speed) {
+    public WinchFixed (Climber climberUsed, double speed) {
       climber = climberUsed;
       this.speed = speed;
       addRequirements(climber);

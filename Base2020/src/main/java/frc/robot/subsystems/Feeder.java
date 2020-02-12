@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CANIDs;
 import frc.robot.Constants.FeederConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -21,7 +22,7 @@ public class Feeder extends SubsystemBase
   private DigitalInput unknownSensor;
 
   public Feeder() {
-    feederMotor = new TalonSRX(FeederConstants.kFeederCAN);
+    feederMotor = new TalonSRX(CANIDs.kFeederCAN);
     unknownSensor = new DigitalInput(FeederConstants.kSensorDIO);
   }
 

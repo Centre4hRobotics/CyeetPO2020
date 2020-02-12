@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class ExtendClimber extends CommandBase{
+public class ClimberPistonExtend extends CommandBase{
 
   private Climber climber;
-    public ExtendClimber (Climber climberUsed) {
+    public ClimberPistonExtend (Climber climberUsed) {
       climber = climberUsed;
       addRequirements(climber);
     }

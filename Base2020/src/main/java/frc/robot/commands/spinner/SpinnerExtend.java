@@ -13,9 +13,9 @@ import frc.robot.subsystems.Spinner;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ExtendSpinnerArm extends CommandBase {
+public class SpinnerExtend extends CommandBase {
   private Spinner spinner;
-  public ExtendSpinnerArm(Spinner spinner) {
+  public SpinnerExtend(Spinner spinner) {
       this.spinner = spinner;
     // Use requires() here to declare subsystem dependencies
     addRequirements(spinner);

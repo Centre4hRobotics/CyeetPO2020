@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants.DriveConstants;;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.CANIDs;
 
 public class Drive extends SubsystemBase {
 
@@ -33,10 +34,10 @@ public class Drive extends SubsystemBase {
     LEFT, RIGHT;
   }
 
-  private final CANSparkMax mLeftMaster = new CANSparkMax(DriveConstants.kLMCAN, MotorType.kBrushless);
-  private final CANSparkMax mLeftSlave = new CANSparkMax(DriveConstants.kLFCAN, MotorType.kBrushless);
-  private final CANSparkMax mRightMaster = new CANSparkMax(DriveConstants.kRMCAN, MotorType.kBrushless);
-  private final CANSparkMax mRightSlave = new CANSparkMax(DriveConstants.kRFCAN, MotorType.kBrushless);
+  private final CANSparkMax mLeftMaster = new CANSparkMax(CANIDs.kLMCAN, MotorType.kBrushless);
+  private final CANSparkMax mLeftSlave = new CANSparkMax(CANIDs.kLFCAN, MotorType.kBrushless);
+  private final CANSparkMax mRightMaster = new CANSparkMax(CANIDs.kRMCAN, MotorType.kBrushless);
+  private final CANSparkMax mRightSlave = new CANSparkMax(CANIDs.kRFCAN, MotorType.kBrushless);
 
   
 

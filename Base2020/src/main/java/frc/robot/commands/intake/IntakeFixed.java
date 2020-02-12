@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 
-public class DriveIntake extends CommandBase{
+public class IntakeFixed extends CommandBase{
 
   private Intake intake;
   private double speed;
-    public DriveIntake (Intake intakeUsed, double speed) {
+    public IntakeFixed (Intake intakeUsed, double speed) {
       intake = intakeUsed;
       this.speed = speed;
       addRequirements(intake);

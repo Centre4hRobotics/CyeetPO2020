@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import frc.robot.Pneumatics;
+import frc.robot.Constants.CANIDs;
 import frc.robot.Constants.SpinnerConstants;
 
 /**
@@ -41,7 +42,7 @@ public class Spinner extends SubsystemBase {
 
   public Spinner (Pneumatics pcm) {
 
-      motor = new TalonSRX(SpinnerConstants.kSpinCAN);
+      motor = new TalonSRX(CANIDs.kSpinCAN);
       this.p = pcm;
       
       // Rev Color sensor V3

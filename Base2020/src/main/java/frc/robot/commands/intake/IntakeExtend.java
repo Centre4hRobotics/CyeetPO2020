@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 
-public class RetractIntake extends CommandBase{
+public class IntakeExtend extends CommandBase{
 
   private Intake intake;
-    public RetractIntake (Intake intakeUsed) {
+    public IntakeExtend (Intake intakeUsed) {
       intake = intakeUsed;
       addRequirements(intakeUsed);
     }
@@ -16,7 +16,7 @@ public class RetractIntake extends CommandBase{
     @Override
     public void execute() {
 
-      intake.retract();
+      intake.extend();
         
     }
 

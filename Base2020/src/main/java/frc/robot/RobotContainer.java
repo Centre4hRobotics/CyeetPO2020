@@ -93,36 +93,36 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Drive at half speed when the right bumper is held
+      //Drive commands
       new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
 
       //Feeder commands
-      new JoystickButton(c_function1, 1).whenPressed(new FixedFeeder(m_feeder, 0.3));
-      new JoystickButton(c_function1, 9).whenPressed(new FixedFeeder(m_feeder, -0.3));
+      new JoystickButton(c_function1, 1).whenPressed(new FeederFixed(m_feeder, 0.3));
+      new JoystickButton(c_function1, 9).whenPressed(new FeederFixed(m_feeder, -0.3));
 
       //Spinner commands
-      new JoystickButton(c_function1, 4).whenPressed(new DriveSpinner(m_spinner, 0.3));
-      new JoystickButton(c_function1, 5).whenPressed(new DriveSpinner(m_spinner, -0.3));
-      new JoystickButton(c_function1, 6).whenPressed(new RetractSpinnerArm(m_spinner));
-      new JoystickButton(c_function1, 7).whenPressed(new ExtendSpinnerArm(m_spinner));
+      new JoystickButton(c_function1, 4).whenPressed(new SpinnerFixed(m_spinner, 0.3));
+      new JoystickButton(c_function1, 5).whenPressed(new SpinnerFixed(m_spinner, -0.3));
+      new JoystickButton(c_function1, 6).whenPressed(new SpinnerRetract(m_spinner));
+      new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));
 
       //Intake commands
-      new JoystickButton(c_function2, 1).whenPressed(new DriveIntake(m_intake, 0.3));
-      new JoystickButton(c_function2, 2).whenPressed(new DriveIntake(m_intake, -0.3));
-      new JoystickButton(c_function1, 8).whenPressed(new RetractIntake(m_intake));
-      new JoystickButton(c_function2, 3).whenPressed(new ExtendIntake(m_intake));
+      new JoystickButton(c_function2, 1).whenPressed(new IntakeFixed(m_intake, 0.3));
+      new JoystickButton(c_function2, 2).whenPressed(new IntakeFixed(m_intake, -0.3));
+      new JoystickButton(c_function1, 8).whenPressed(new IntakeRetract(m_intake));
+      new JoystickButton(c_function2, 3).whenPressed(new IntakeExtend(m_intake));
 
       //Climber commands
-      new JoystickButton(c_function1, 10).whenPressed(new RetractClimber(m_climber));
+      new JoystickButton(c_function1, 10).whenPressed(new ClimberPistonRetract(m_climber));
       new JoystickButton(c_function2, 9).whenPressed(new ClimberPistonOff(m_climber));
-      new JoystickButton(c_function2, 10).whenPressed(new ExtendClimber(m_climber));
+      new JoystickButton(c_function2, 10).whenPressed(new ClimberPistonExtend(m_climber));
 
       //Shooter commands
       new JoystickButton(c_function2, 4).whenPressed(new ShooterExtend(m_shooter));
       new JoystickButton(c_function2, 5).whenPressed(new ShooterRetract(m_shooter));
-      new JoystickButton(c_function2, 6).whenPressed(new DriveShooterFixed(m_shooter, 0.6));
-      new JoystickButton(c_function2, 7).whenPressed(new DriveShooterFixed(m_shooter, 0.9));
-      new JoystickButton(c_function2, 8).whenPressed(new DriveShooterFixed(m_shooter, 1.0));
+      new JoystickButton(c_function2, 6).whenPressed(new ShooterFixed(m_shooter, 0.6));
+      new JoystickButton(c_function2, 7).whenPressed(new ShooterFixed(m_shooter, 0.9));
+      new JoystickButton(c_function2, 8).whenPressed(new ShooterFixed(m_shooter, 1.0));
   }
 
 

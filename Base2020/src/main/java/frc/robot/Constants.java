@@ -16,25 +16,16 @@ public final class Constants {
   public static final class DriveConstants {
     public static final boolean testMode = true;
 
-    public static final int kRMCAN = 3;
-    public static final int kRFCAN = 4;
-    public static final int kLMCAN = 1;
-    public static final int kLFCAN = 2;
-
+    //Drive controller constants
     public static final boolean squareSpeedInput = false;
     public static final boolean squareRotInput = true;
     public static final double maxArcadeOutput = 1.0;
 
-    /*public static final int kLeftMotor1Port = 0;
-    public static final int kLeftMotor2Port = 1;
-    public static final int kRightMotor1Port = 2;
-    public static final int kRightMotor2Port = 3;
-
-    public static final int[] kLeftEncoderPorts = new int[]{0, 1};
-    public static final int[] kRightEncoderPorts = new int[]{2, 3};*/
+    //Encoders reversed
     public static final boolean kLeftEncoderReversed = false;
     public static final boolean kRightEncoderReversed = true;
 
+    //Drive characteristics
     public static final double kTrackwidthMeters = 0.555;
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
@@ -61,18 +52,61 @@ public final class Constants {
     public static final double kDDriveVel = 0.0;
   }
 
-  public static final class ClimberConstants {
-    public static final int kClimberLCAN = 1;
-    public static final int kClimberRCAN = 1;
-  }
+  public static final class ClimberConstants {}
 
   public static final class FeederConstants {
-    public static final int kFeederCAN = 7;   //We don't know what it is yet
-    public static final int kSensorDIO = 1;   //We also don't know what this is yet
+    public static final int kSensorDIO = 1;   //We don't know what this is yet
   }
 
-  public static final class IntakeConstants {
-    public static final int kIntakeCAN = 7;   //We don't know what it is yet
+  public static final class IntakeConstants {}
+
+  public static final class SpinnerConstants {
+    //Target Colors on spinner
+    public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    public static final Color kRedTarget = ColorMatch.makeColor(0.535, 0.337, 0.128);
+    public static final Color kYellowTarget = ColorMatch.makeColor(0.321, 0.553, 0.125);
+  }
+
+  public static final class ShooterConstants {}
+
+  public static final class CANIDs {
+    //Drive Motor SparkMAX CAN IDs (L/R, Master/Follower)
+    public static final int kRMCAN = 3;
+    public static final int kRFCAN = 4;
+    public static final int kLMCAN = 1;
+    public static final int kLFCAN = 2;
+
+    //k Shooter Motor (1/2) CAN IDs SparkMAX
+    public static final int kSM1CAN = 5;
+    public static final int kSM2CAN = 6;
+
+    //Intake TalonSRX CAN ID
+    public static final int kIntakeCAN = 11;
+
+    //Indexer TalonSRX CAN ID
+    public static final int kFeederCAN = 12;
+
+    //Climber TalonSRX CAN IDs (L/R)
+    public static final int kClimberLCAN = 13;
+    public static final int kClimberRCAN = 14;
+
+    //Spinner TalonSRX CANID
+    public static final int kSpinCAN = 15;
+  }
+
+  public static final class PneumaticConstants {
+    //Climb DoubleSolenoid channels
+    public static final int[] kClimbChannels = {0,1};
+
+    //Spinner Solenoid channel
+    public static final int kSpinChannel = 2;
+
+    //Shooter Solenoid channel
+    public static final int kShootChannel = 3;
+
+    //Intake Solenoid channel
+    public static final int kIntakeChannel = 4;
   }
 
   public static final class OIConstants {
@@ -87,27 +121,5 @@ public final class Constants {
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
-  }
-
-  public static final class SpinnerConstants {
-    public static final int kSpinCAN = 9;
-    public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    public static final Color kRedTarget = ColorMatch.makeColor(0.535, 0.337, 0.128);
-    public static final Color kYellowTarget = ColorMatch.makeColor(0.321, 0.553, 0.125);
-  }
-
-  public static final class ShooterConstants {
-    //k Shooter Motor (1/2) CAN IDs
-    public static final int kSM1CAN = 5;
-    public static final int kSM2CAN = 6;
-  }
-
-  public static final class PneumaticConstants {
-    public static final int[] kClimbChannels = {0,1};
-    public static final int kSpinChannel = 2;
-    public static final int kShootChannel = 3;
-    public static final int kIntakeChannel = 4;
-    
   }
 }

@@ -17,7 +17,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Pneumatics;
-import frc.robot.Constants.ShooterConstants;
+//import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.CANIDs;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -34,8 +35,8 @@ public class Shooter extends SubsystemBase {
 
   public Shooter (Pneumatics pcm) {
     this.p = pcm;
-    motor1 = new CANSparkMax(ShooterConstants.kSM1CAN, MotorType.kBrushless);
-    motor2 = new CANSparkMax(ShooterConstants.kSM2CAN, MotorType.kBrushless);
+    motor1 = new CANSparkMax(CANIDs.kSM1CAN, MotorType.kBrushless);
+    motor2 = new CANSparkMax(CANIDs.kSM2CAN, MotorType.kBrushless);
 
     encoder1 = motor1.getEncoder();
     encoder2 = motor2.getEncoder();
