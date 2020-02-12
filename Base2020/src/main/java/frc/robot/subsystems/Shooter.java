@@ -10,15 +10,17 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Pneumatics;
-//import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.CANIDs;
+import frc.robot.Constants.ShooterConstants;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -28,15 +30,26 @@ public class Shooter extends SubsystemBase {
   // here. Call these from Commands.
 
   private CANSparkMax motor1, motor2;
+  private CANPIDController shooterPID;
   private CANEncoder encoder1, encoder2;
   private ShuffleboardTab tab;
   private ArrayList<NetworkTableEntry> entries;
   private Pneumatics p;
+  private double vel;
 
   public Shooter (Pneumatics pcm) {
     this.p = pcm;
     motor1 = new CANSparkMax(CANIDs.kSM1CAN, MotorType.kBrushless);
     motor2 = new CANSparkMax(CANIDs.kSM2CAN, MotorType.kBrushless);
+
+    /*shooterPID = motor1.getPIDController();
+    shooterPID.setP(ShooterConstants.kP);
+    shooterPID.setI(ShooterConstants.kI);
+    shooterPID.setD(ShooterConstants.kD);
+    shooterPID.setIZone(ShooterConstants.kIz);
+    shooterPID.setFF(ShooterConstants.kFF);
+    shooterPID.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
+    vel = 0;*/
 
     encoder1 = motor1.getEncoder();
     encoder2 = motor2.getEncoder();
@@ -93,4 +106,13 @@ public class Shooter extends SubsystemBase {
     motor1.set(-1*speed);
     motor2.set(speed);
   }
+
+  /*public void setVelocity (double velocity) {
+    shooterPID.setReference(velocity, ControlType.kVelocity);
+    vel = velocity;
+  }
+
+  public double getVelocity() {
+    return vel;
+  }*/
 }

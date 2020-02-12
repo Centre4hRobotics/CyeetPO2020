@@ -69,7 +69,16 @@ public final class Constants {
     public static final Color kYellowTarget = ColorMatch.makeColor(0.321, 0.553, 0.125);
   }
 
-  public static final class ShooterConstants {}
+  public static final class ShooterConstants {
+    //PID controller constants - need to figure out
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kIz = 0; 
+    public static final double kFF = 0; 
+    public static final double kMaxOutput = 0; 
+    public static final double kMinOutput = 0;
+  }
 
   public static final class CANIDs {
     //Drive Motor SparkMAX CAN IDs (L/R, Master/Follower)
@@ -98,16 +107,16 @@ public final class Constants {
 
   public static final class PneumaticConstants {
     //Climb DoubleSolenoid channels
-    public static final int[] kClimbChannels = {0,1};
+    public static final int[] kClimbChannels = {0,4};
 
     //Spinner Solenoid channel
-    public static final int kSpinChannel = 2;
+    public static final int kSpinChannel = 1;
 
     //Shooter Solenoid channel
-    public static final int kShootChannel = 3;
+    public static final int kShootChannel = 2;
 
     //Intake Solenoid channel
-    public static final int kIntakeChannel = 4;
+    public static final int kIntakeChannel = 3;
   }
 
   public static final class OIConstants {

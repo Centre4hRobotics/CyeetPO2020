@@ -23,8 +23,8 @@ public class Feeder extends SubsystemBase
 
   public Feeder() {
     feederMotor = new TalonSRX(CANIDs.kFeederCAN);
-    unknownSensor1 = new DigitalInput(FeederConstants.kSensor1DIO);
-    unknownSensor2 = new DigitalInput(FeederConstants.kSensor2DIO);
+    /*unknownSensor1 = new DigitalInput(FeederConstants.kSensor1DIO);
+    unknownSensor2 = new DigitalInput(FeederConstants.kSensor2DIO);*/
   }
 
   public void setSpeed (double speed)
@@ -34,10 +34,10 @@ public class Feeder extends SubsystemBase
 
   public boolean sensorTriggered (int sensor) {
     //returns true if sensor is triggered, false if it is clear
-    if(sensor==1)
+    /*if(sensor==1)
       return unknownSensor1.get();
     if(sensor==2)
-      return unknownSensor2.get();
+      return unknownSensor2.get();*/
     return false;
   }
 
