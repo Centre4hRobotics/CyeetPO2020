@@ -55,7 +55,8 @@ public final class Constants {
   public static final class ClimberConstants {}
 
   public static final class FeederConstants {
-    public static final int kSensorDIO = 1;   //We don't know what this is yet
+    public static final int kSensor1DIO = 1;   //We don't know what this is yet
+    public static final int kSensor2DIO = 2;
   }
 
   public static final class IntakeConstants {}
