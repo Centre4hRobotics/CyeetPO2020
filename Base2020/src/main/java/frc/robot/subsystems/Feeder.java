@@ -29,7 +29,8 @@ public class Feeder extends SubsystemBase
 
   public void setSpeed (double speed)
   {
-      feederMotor.set(ControlMode.PercentOutput, speed);
+    //Currently backwards!!! Fixed.
+      feederMotor.set(ControlMode.PercentOutput, -1*speed);
   }
 
   public boolean sensorTriggered (int sensor) {

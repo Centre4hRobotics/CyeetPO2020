@@ -64,16 +64,16 @@ public class RobotContainer {
     m_spinner.setDefaultCommand(null);*/
     
     m_shooter = new Shooter (p_pneumatics);
-    m_shooter.setDefaultCommand(null);
+    //m_shooter.setDefaultCommand(new ShooterFixed(m_shooter, 0.0));
 
     m_climber = new Climber (p_pneumatics);
     m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 0.4));
 
     m_intake = new Intake (p_pneumatics);
-    m_intake.setDefaultCommand(null);
+    //m_intake.setDefaultCommand(new IntakeFixed(m_intake, 0.0));
 
     m_feeder = new Feeder ();
-    m_feeder.setDefaultCommand(null);
+    //m_feeder.setDefaultCommand(new FeederFixed(m_feeder, 0.0));
 
     m_drive = new Drive();
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, c_driver, 1.0));
@@ -97,8 +97,8 @@ public class RobotContainer {
       new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
 
       //Feeder commands
-      new JoystickButton(c_function1, 1).whenPressed(new FeederFixed(m_feeder, 0.3));
-      new JoystickButton(c_function1, 9).whenPressed(new FeederFixed(m_feeder, -0.3));
+      new JoystickButton(c_function1, 1).whileHeld(new FeederFixed(m_feeder, 0.3));
+      new JoystickButton(c_function1, 9).whileHeld(new FeederFixed(m_feeder, -0.3));
 
       //Spinner commands
       /*new JoystickButton(c_function1, 4).whenPressed(new SpinnerFixed(m_spinner, 0.3));
@@ -107,8 +107,8 @@ public class RobotContainer {
       new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));*/
 
       //Intake commands
-      new JoystickButton(c_function2, 1).whenPressed(new IntakeFixed(m_intake, 0.3));
-      new JoystickButton(c_function2, 2).whenPressed(new IntakeFixed(m_intake, -0.3));
+      new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.4));
+      new JoystickButton(c_function2, 2).whileHeld(new IntakeFixed(m_intake, -0.4));
       new JoystickButton(c_function1, 8).whenPressed(new IntakeRetract(m_intake));
       new JoystickButton(c_function2, 3).whenPressed(new IntakeExtend(m_intake));
 
@@ -120,9 +120,9 @@ public class RobotContainer {
       //Shooter commands
       new JoystickButton(c_function2, 4).whenPressed(new ShooterExtend(m_shooter));
       new JoystickButton(c_function2, 5).whenPressed(new ShooterRetract(m_shooter));
-      new JoystickButton(c_function2, 6).whenPressed(new ShooterFixed(m_shooter, 0.6));
-      new JoystickButton(c_function2, 7).whenPressed(new ShooterFixed(m_shooter, 0.9));
-      new JoystickButton(c_function2, 8).whenPressed(new ShooterFixed(m_shooter, 1.0));
+      new JoystickButton(c_function2, 6).whileHeld(new ShooterFixed(m_shooter, 0.6));
+      new JoystickButton(c_function2, 7).whileHeld(new ShooterFixed(m_shooter, 0.9));
+      new JoystickButton(c_function2, 8).whileHeld(new ShooterFixed(m_shooter, 1.0));
   }
 
 

@@ -13,17 +13,17 @@ import frc.robot.Constants.CANIDs;
 //import frc.robot.Constants.IntakeConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Intake extends SubsystemBase
 { 
 
-  private VictorSPX intakeMotor;
+  private TalonSRX intakeMotor;
   private Pneumatics p;
 
   public Intake(Pneumatics pneumatics) {
     this.p = pneumatics;
-    intakeMotor = new VictorSPX(CANIDs.kIntakeCAN);
+    intakeMotor = new TalonSRX(CANIDs.kIntakeCAN);
   }
 
   public void extend () {
