@@ -41,7 +41,7 @@ public class RobotContainer {
   //private final Spinner m_spinner;
   private final Intake m_intake;
   private final Feeder m_feeder;
-  //private final Climber m_climber;
+  private final Climber m_climber;
 
   public static NetworkTableInstance ntinst;
   private final Pneumatics p_pneumatics;
@@ -66,8 +66,8 @@ public class RobotContainer {
     m_shooter = new Shooter (p_pneumatics);
     m_shooter.setDefaultCommand(null);
 
-    /*m_climber = new Climber (p_pneumatics);
-    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 0.4));*/
+    m_climber = new Climber (p_pneumatics);
+    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 0.4));
 
     m_intake = new Intake (p_pneumatics);
     m_intake.setDefaultCommand(null);
@@ -113,9 +113,9 @@ public class RobotContainer {
       new JoystickButton(c_function2, 3).whenPressed(new IntakeExtend(m_intake));
 
       //Climber commands
-      /*new JoystickButton(c_function1, 10).whenPressed(new ClimberPistonRetract(m_climber));
+      new JoystickButton(c_function1, 10).whenPressed(new ClimberPistonRetract(m_climber));
       new JoystickButton(c_function2, 9).whenPressed(new ClimberPistonOff(m_climber));
-      new JoystickButton(c_function2, 10).whenPressed(new ClimberPistonExtend(m_climber));*/
+      new JoystickButton(c_function2, 10).whenPressed(new ClimberPistonExtend(m_climber));
 
       //Shooter commands
       new JoystickButton(c_function2, 4).whenPressed(new ShooterExtend(m_shooter));

@@ -30,7 +30,7 @@ public class IntakeFixed extends CommandBase{
 
     @Override
     public void end (boolean interrupted) {
-        
+        intake.setSpeed(0.0);
     }
 
     @Override

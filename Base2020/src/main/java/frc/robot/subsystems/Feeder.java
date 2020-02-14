@@ -29,7 +29,7 @@ public class Feeder extends SubsystemBase
 
   public void setSpeed (double speed)
   {
-      feederMotor.set(ControlMode.Velocity, speed);
+      feederMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean sensorTriggered (int sensor) {

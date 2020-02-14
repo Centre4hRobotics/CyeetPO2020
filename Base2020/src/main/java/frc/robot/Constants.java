@@ -82,27 +82,27 @@ public final class Constants {
 
   public static final class CANIDs {
     //Drive Motor SparkMAX CAN IDs (L/R, Master/Follower)
-    public static final int kRMCAN = 3;
-    public static final int kRFCAN = 4;
-    public static final int kLMCAN = 1;
-    public static final int kLFCAN = 2;
+    public static final int kRMCAN = 1;
+    public static final int kRFCAN = 2;
+    public static final int kLMCAN = 3;
+    public static final int kLFCAN = 4;
 
     //k Shooter Motor (1/2) CAN IDs SparkMAX
     public static final int kSM1CAN = 5;
     public static final int kSM2CAN = 6;
 
     //Intake TalonSRX CAN ID
-    public static final int kIntakeCAN = 11;
+    public static final int kIntakeCAN = 14;
 
     //Indexer TalonSRX CAN ID
     public static final int kFeederCAN = 12;
 
     //Climber TalonSRX CAN IDs (L/R)
     public static final int kClimberLCAN = 13;
-    public static final int kClimberRCAN = 14;
+    public static final int kClimberRCAN = 15;
 
     //Spinner TalonSRX CANID
-    public static final int kSpinCAN = 15;
+    public static final int kSpinCAN = 11;
   }
 
   public static final class PneumaticConstants {

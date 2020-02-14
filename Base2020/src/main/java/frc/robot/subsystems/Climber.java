@@ -34,12 +34,12 @@ public class Climber extends SubsystemBase {
   
   public void setRSpeed(double speed)
   {
-    climberR.set(ControlMode.Velocity, speed);
+    climberR.set(ControlMode.PercentOutput, speed);
   }  
 
   public void setLSpeed(double speed)
   {
-    climberL.set(ControlMode.Velocity, speed);
+    climberL.set(ControlMode.PercentOutput, speed);
   }  
 
   public void extend()

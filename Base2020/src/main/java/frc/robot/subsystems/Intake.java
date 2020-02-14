@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase
 
   public void setSpeed (double speed)
   {
-      intakeMotor.set(ControlMode.Velocity, speed);
+      intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
   @Override

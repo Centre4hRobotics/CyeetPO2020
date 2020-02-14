@@ -87,7 +87,7 @@ public class Spinner extends SubsystemBase {
   }
 
   public void setSpeed (double speed) {
-      motor.set(ControlMode.Velocity, speed);
+      motor.set(ControlMode.PercentOutput, speed);
   }
 
   public void extend () {
