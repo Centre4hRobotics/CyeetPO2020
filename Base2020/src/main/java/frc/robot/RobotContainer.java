@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.*;
@@ -50,6 +53,8 @@ public class RobotContainer {
   private final XboxController c_driver;
   private final Joystick c_function1, c_function2;
 
+  //private SendableChooser<Command> autoselect;
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -67,7 +72,7 @@ public class RobotContainer {
     //m_shooter.setDefaultCommand(new ShooterFixed(m_shooter, 0.0));
 
     m_climber = new Climber (p_pneumatics);
-    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 0.4));
+    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 1));
 
     m_intake = new Intake (p_pneumatics);
     //m_intake.setDefaultCommand(new IntakeFixed(m_intake, 0.0));
@@ -84,6 +89,7 @@ public class RobotContainer {
   public void robotInit () {
     m_drive.zeroHeading();
     m_drive.resetOdometry(new Pose2d());
+    m_climber.retract();
   }
 
   /**
@@ -95,6 +101,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
       //Drive commands
       new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
+      new JoystickButton(c_driver, Button.kY.value).whenPressed (new RunTrajectory(m_drive, Trajectories.straightToShootThrees).andThen(new Stop(m_drive)));
+      new JoystickButton(c_driver, Button.kX.value).whenPressed (new RunTrajectory(m_drive, Trajectories.straightBackToShootThrees).andThen(new Stop(m_drive)));
 
       //Feeder commands
       new JoystickButton(c_function1, 1).whileHeld(new FeederFixed(m_feeder, 0.3));
@@ -107,8 +115,8 @@ public class RobotContainer {
       new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));*/
 
       //Intake commands
-      new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.4));
-      new JoystickButton(c_function2, 2).whileHeld(new IntakeFixed(m_intake, -0.4));
+      new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.6));
+      new JoystickButton(c_function2, 2).whileHeld(new IntakeFixed(m_intake, -0.6));
       new JoystickButton(c_function1, 8).whenPressed(new IntakeRetract(m_intake));
       new JoystickButton(c_function2, 3).whenPressed(new IntakeExtend(m_intake));
 
@@ -123,6 +131,7 @@ public class RobotContainer {
       new JoystickButton(c_function2, 6).whileHeld(new ShooterFixed(m_shooter, 0.6));
       new JoystickButton(c_function2, 7).whileHeld(new ShooterFixed(m_shooter, 0.9));
       new JoystickButton(c_function2, 8).whileHeld(new ShooterFixed(m_shooter, 1.0));
+      new JoystickButton(c_function1, 2).whileHeld(new ShooterFixed(m_shooter, -0.3));
   }
 
 
@@ -132,7 +141,25 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;/*new RunTrajectory(m_drive, Trajectories.diamond)
+    String selected = "ShootThenDrive";//SmartDashboard.getString("Auto Selector", "Default");
+    if (selected.equalsIgnoreCase("ShootThenDrive")) {
+      return new SequentialCommandGroup(
+        new DriveStraight(m_drive, 0.5).withTimeout(1.3),
+        new ShooterRetract(m_shooter),
+        new ShooterFixed(m_shooter, 0.7).withTimeout(0.3),
+        new ParallelCommandGroup( 
+          new ShooterFixed(m_shooter, 0.7),
+          new FeederFixed (m_feeder, 0.3)
+        ).withTimeout(8)
+      );
+    }
+    if (selected.equalsIgnoreCase("Auto Line")) {
+      return new DriveStraight(m_drive, 0.4).withTimeout(1);
+    }
+    return new Stop(m_drive);
+
+    
+    /*new RunTrajectory(m_drive, Trajectories.diamond)
               //.andThen(new RunTrajectory(m_drive, Trajectories.turnBackAroundTrajectory))
               .andThen(new Stop(m_drive));*/
   }

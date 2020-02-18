@@ -190,6 +190,11 @@ public class Drive extends SubsystemBase {
         mRightMaster.set(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
   }
 
+  //Overload with maxSpeed = 1
+  public void arcadeDrive (double xSpeed, double zRotation) {
+    arcadeDrive(xSpeed, zRotation, 1);
+  }
+
   /**
    * Returns the currently-estimated pose of the robot.
    *

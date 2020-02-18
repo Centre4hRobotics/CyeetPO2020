@@ -19,7 +19,7 @@ public class Stop implements Command {
     }
 
     public void end(boolean interrupted) {
-        System.out.print("Stop complete");
+        //System.out.print("Stop complete");
         dtrain.tankDriveVolts(0,0);
     }
 
