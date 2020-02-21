@@ -14,16 +14,19 @@ import frc.robot.Constants.CANIDs;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase
 { 
 
-  private TalonSRX intakeMotor;
+  private CANSparkMax intakeMotor;
   private Pneumatics p;
 
   public Intake(Pneumatics pneumatics) {
     this.p = pneumatics;
-    intakeMotor = new TalonSRX(CANIDs.kIntakeCAN);
+    intakeMotor = new CANSparkMax(CANIDs.kIntakeCAN, MotorType.kBrushless);
   }
 
   public void extend () {
@@ -36,7 +39,7 @@ public class Intake extends SubsystemBase
 
   public void setSpeed (double speed)
   {
-      intakeMotor.set(ControlMode.PercentOutput, speed);
+      intakeMotor.set(speed);
   }
 
   @Override

@@ -91,8 +91,8 @@ public final class Constants {
     public static final int kSM1CAN = 5;
     public static final int kSM2CAN = 6;
 
-    //Intake TalonSRX CAN ID
-    public static final int kIntakeCAN = 14;
+    //Intake SparkMax CAN ID
+    public static final int kIntakeCAN = 8;
 
     //Indexer TalonSRX CAN ID
     public static final int kFeederCAN = 12;
