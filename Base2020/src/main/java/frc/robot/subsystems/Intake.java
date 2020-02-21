@@ -12,10 +12,7 @@ import frc.robot.Pneumatics;
 import frc.robot.Constants.CANIDs;
 //import frc.robot.Constants.IntakeConstants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase

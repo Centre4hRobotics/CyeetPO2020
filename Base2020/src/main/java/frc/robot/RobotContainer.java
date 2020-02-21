@@ -111,8 +111,8 @@ public class RobotContainer {
       //Spinner commands
       /*new JoystickButton(c_function1, 4).whenPressed(new SpinnerFixed(m_spinner, 0.3));
       new JoystickButton(c_function1, 5).whenPressed(new SpinnerFixed(m_spinner, -0.3));
-      new JoystickButton(c_function1, 6).whenPressed(new SpinnerRetract(m_spinner));
-      new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));*/
+      new JoystickButton(c_function1, 3).whenPressed(new SpinnerExtend(m_spinner));
+      new JoystickButton(c_function1, 3).whenReleased(new SpinnerRetract(m_spinner));*/
 
       //Intake commands
       new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.6));
