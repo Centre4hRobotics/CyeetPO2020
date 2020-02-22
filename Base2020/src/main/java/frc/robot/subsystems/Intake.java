@@ -8,23 +8,35 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Pneumatics;
+import frc.robot.Constants.CANIDs;
+//import frc.robot.Constants.IntakeConstants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase
 { 
 
-  private VictorSPX intakeMotor;
+  private CANSparkMax intakeMotor;
+  private Pneumatics p;
 
-  public Intake() {
-    intakeMotor = new VictorSPX(IntakeConstants.kIntakeCAN);
+  public Intake(Pneumatics pneumatics) {
+    this.p = pneumatics;
+    intakeMotor = new CANSparkMax(CANIDs.kIntakeCAN, MotorType.kBrushless);
+  }
+
+  public void extend () {
+    p.setIntakeState(true);
+  }
+
+  public void retract () {
+    p.setIntakeState(false);
   }
 
   public void setSpeed (double speed)
   {
-      intakeMotor.set(ControlMode.Velocity, speed);
+      intakeMotor.set(speed);
   }
 
   @Override

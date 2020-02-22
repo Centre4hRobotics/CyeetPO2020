@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class RetractClimber extends CommandBase{
+public class ClimberPistonRetract extends CommandBase{
 
   private Climber climber;
-    public RetractClimber (Climber climberUsed) {
+    public ClimberPistonRetract (Climber climberUsed) {
       climber = climberUsed;
       addRequirements(climber);
     }

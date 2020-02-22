@@ -7,10 +7,7 @@
 
 package frc.robot.commands.spinner;
 
-import com.revrobotics.ColorMatchResult;
-
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Spinner;
 
@@ -19,13 +16,11 @@ import frc.robot.subsystems.Spinner;
  */
 public class TurnToColor extends CommandBase {
     private double spinSpeed;
-    private String colorWanted;
     private Spinner spinner;
 
-  public TurnToColor(Spinner spinner, double spin, String Color) {
+  public TurnToColor(Spinner spinner, double spin) {
     this.spinner = spinner;
     this.spinSpeed = spin;
-    this.colorWanted = Color;
     addRequirements(spinner);
     }
 
@@ -39,13 +34,7 @@ public class TurnToColor extends CommandBase {
   {
     // Color Finding Code
 
-    Color foundColor = spinner.getColorSensor().getColor();
-    ColorMatchResult colorResult = spinner.getColorMatcher().matchClosestColor(foundColor);
-    String colorOutput = "black";
-    colorOutput = spinner.getColorString(colorResult);
-    boolean hasColorBeenFound = colorOutput != "black" && colorOutput.equals(colorWanted);
-
-    if (hasColorBeenFound)
+    if (spinner.getCurrentColor().equals(spinner.getColorWanted()))
     {
       Timer.delay(0.05);
       end(false);
@@ -53,9 +42,6 @@ public class TurnToColor extends CommandBase {
     else {
       spinner.setSpeed(spinSpeed);
     }
-
-
-    spinner.updateShuffle(hasColorBeenFound,colorOutput,colorWanted, colorResult.confidence, foundColor);
 
   }
 

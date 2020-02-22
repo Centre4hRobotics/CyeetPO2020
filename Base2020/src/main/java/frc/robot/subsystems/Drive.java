@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants.DriveConstants;;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.CANIDs;
 
 public class Drive extends SubsystemBase {
 
@@ -33,10 +34,10 @@ public class Drive extends SubsystemBase {
     LEFT, RIGHT;
   }
 
-  private final CANSparkMax mLeftMaster = new CANSparkMax(DriveConstants.kLMCAN, MotorType.kBrushless);
-  private final CANSparkMax mLeftSlave = new CANSparkMax(DriveConstants.kLFCAN, MotorType.kBrushless);
-  private final CANSparkMax mRightMaster = new CANSparkMax(DriveConstants.kRMCAN, MotorType.kBrushless);
-  private final CANSparkMax mRightSlave = new CANSparkMax(DriveConstants.kRFCAN, MotorType.kBrushless);
+  private final CANSparkMax mLeftMaster = new CANSparkMax(CANIDs.kLMCAN, MotorType.kBrushless);
+  private final CANSparkMax mLeftSlave = new CANSparkMax(CANIDs.kLFCAN, MotorType.kBrushless);
+  private final CANSparkMax mRightMaster = new CANSparkMax(CANIDs.kRMCAN, MotorType.kBrushless);
+  private final CANSparkMax mRightSlave = new CANSparkMax(CANIDs.kRFCAN, MotorType.kBrushless);
 
   
 
@@ -105,6 +106,7 @@ public class Drive extends SubsystemBase {
      
   }
 
+  //make hashmap hold widget instead of entry, get entry when needed
   private void initShuffleboardMap() {
     entries = new HashMap<String, NetworkTableEntry> (12);
     for (int i = 0; i<intEntryNames.length; i++) {
@@ -186,6 +188,11 @@ public class Drive extends SubsystemBase {
         entries.get("RightInput").setNumber(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
         mLeftMaster.set(MathUtil.clamp(leftMotorOutput, -1.0, 1.0) * maxOutput);
         mRightMaster.set(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
+  }
+
+  //Overload with maxSpeed = 1
+  public void arcadeDrive (double xSpeed, double zRotation) {
+    arcadeDrive(xSpeed, zRotation, 1);
   }
 
   /**

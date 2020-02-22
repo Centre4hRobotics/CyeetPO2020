@@ -1,17 +1,21 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 
-public class FixedWinchSpeed extends CommandBase{
+public class ManualWinch extends CommandBase{
 
   private Climber climber;
   private double speed;
-    public FixedWinchSpeed (Climber climberUsed, double speed) {
+  private Joystick f1, f2;
+    public ManualWinch (Climber climberUsed, Joystick function1, Joystick function2, double maxSpeed) {
       climber = climberUsed;
-      this.speed = speed;
+      this.speed = maxSpeed;
+      f1 = function1;
+      f2 = function2;
       addRequirements(climber);
     }
 
@@ -24,8 +28,8 @@ public class FixedWinchSpeed extends CommandBase{
     @Override
     public void execute() {
 
-      climber.setRSpeed(speed);
-      climber.setLSpeed(speed);
+      climber.setLSpeed(f1.getY()*speed);
+      climber.setRSpeed(f2.getY()*speed);
         
     }
 

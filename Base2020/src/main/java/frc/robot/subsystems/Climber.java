@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import frc.robot.Constants.ClimberConstants; 
+import frc.robot.Constants.CANIDs; 
+//import frc.robot.Constants.ClimberConstants;
 import frc.robot.Pneumatics; 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
@@ -26,19 +27,19 @@ public class Climber extends SubsystemBase {
   private Pneumatics p;
 
   public Climber(Pneumatics pneumatics) {
-    climberL = new TalonSRX(ClimberConstants.kClimberLCAN);
-    climberR = new TalonSRX(ClimberConstants.kClimberRCAN);
+    climberL = new TalonSRX(CANIDs.kClimberLCAN);
+    climberR = new TalonSRX(CANIDs.kClimberRCAN);
     p = pneumatics;
   }
   
   public void setRSpeed(double speed)
   {
-    climberR.set(ControlMode.Velocity, speed);
+    climberR.set(ControlMode.PercentOutput, speed);
   }  
 
   public void setLSpeed(double speed)
   {
-    climberL.set(ControlMode.Velocity, speed);
+    climberL.set(ControlMode.PercentOutput, speed);
   }  
 
   public void extend()

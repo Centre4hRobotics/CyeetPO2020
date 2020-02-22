@@ -13,10 +13,12 @@ import frc.robot.subsystems.Spinner;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class RetractSpinnerArm extends CommandBase {
+public class SpinnerFixed extends CommandBase {
   private Spinner spinner;
-  public RetractSpinnerArm(Spinner spinner) {
+  private double speed;
+  public SpinnerFixed(Spinner spinner, double vel) {
       this.spinner = spinner;
+      speed = vel;
     // Use requires() here to declare subsystem dependencies
     addRequirements(spinner);
 
@@ -25,12 +27,17 @@ public class RetractSpinnerArm extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    spinner.retract();
+    spinner.setSpeed(speed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    spinner.setSpeed(0);
   }
 }
