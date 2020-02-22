@@ -278,16 +278,23 @@ if __name__ == "__main__":
     # loop forever
     visiontable = NetworkTables.getTable('Vision')
     recent_points = deque(maxlen=RUNNING_AVERAGE_NUM + 1)
+    last_time = None
     while True:
         #print("In loop")
         # (cv_sink, output_stream, img)
-        for index, (cv_sink, output_stream, img) in enumerate(input_output[:1]):
+        
+        for index, (cv_sink, output_stream, img) in enumerate(input_output[:2]):
             time, img  = cv_sink.grabFrame(img)
+            
 
             #print('time: {}'.format(time))
             if time == 0:
+                print('img error')
                 output_stream.notifyError(cv_sink.getError())
                 continue
+            if last_time != None:
+                print('Time: {} ms'.format((time-last_time) / 1000 ))
+            last_time = time
             #cv2.rectangle(img,(1,1),(100,100),(0,0,0),1)
 
             #Processing begins -Brayden-
@@ -387,3 +394,4 @@ if __name__ == "__main__":
                 
             output_stream.putFrame(img)
             input_output[index] = (cv_sink, output_stream, img)
+            
