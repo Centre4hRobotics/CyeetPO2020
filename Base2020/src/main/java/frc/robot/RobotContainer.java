@@ -41,7 +41,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drive m_drive;
   private final Shooter m_shooter;
-  //private final Spinner m_spinner;
+  private final Spinner m_spinner;
   private final Intake m_intake;
   private final Feeder m_feeder;
   private final Climber m_climber;
@@ -65,8 +65,8 @@ public class RobotContainer {
     ntinst = NetworkTableInstance.getDefault();
     p_pneumatics = new Pneumatics();
 
-    /*m_spinner = new Spinner(p_pneumatics);
-    m_spinner.setDefaultCommand(null);*/
+    m_spinner = new Spinner(p_pneumatics);
+    //m_spinner.setDefaultCommand(null);
     
     m_shooter = new Shooter (p_pneumatics);
     //m_shooter.setDefaultCommand(new ShooterFixed(m_shooter, 0.0));
@@ -109,10 +109,10 @@ public class RobotContainer {
       new JoystickButton(c_function1, 9).whileHeld(new FeederFixed(m_feeder, -0.3));
 
       //Spinner commands
-      /*new JoystickButton(c_function1, 4).whenPressed(new SpinnerFixed(m_spinner, 0.3));
-      new JoystickButton(c_function1, 5).whenPressed(new SpinnerFixed(m_spinner, -0.3));
-      new JoystickButton(c_function1, 3).whenPressed(new SpinnerExtend(m_spinner));
-      new JoystickButton(c_function1, 3).whenReleased(new SpinnerRetract(m_spinner));*/
+      new JoystickButton(c_function1, 4).whileHeld(new SpinnerFixed(m_spinner, 0.3));
+      new JoystickButton(c_function1, 5).whileHeld(new SpinnerFixed(m_spinner, -0.3));
+      new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));
+      new JoystickButton(c_function1, 6).whenPressed(new SpinnerRetract(m_spinner));
 
       //Intake commands
       new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.6));

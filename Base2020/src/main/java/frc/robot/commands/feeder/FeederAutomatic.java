@@ -25,16 +25,16 @@ public class FeederAutomatic extends CommandBase{
     public void execute() {
       if(feeder.sensorTriggered(1)&&!feeder.sensorTriggered(2)) 
       {
-        feeder.setSpeed(speed);
+        feeder.setPercentOutput(speed);
       } else {
-        feeder.setSpeed(0);
+        feeder.setPercentOutput(0);
       }
         
     }
 
     @Override
     public void end (boolean interrupted) {
-      feeder.setSpeed(0.0);
+      feeder.setPercentOutput(0.0);
     }
 
     @Override

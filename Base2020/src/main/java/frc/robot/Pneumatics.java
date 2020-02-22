@@ -39,8 +39,16 @@ public class Pneumatics {
     shootoid.set(state);
   }
 
+  public boolean getShootState () {
+    return shootoid.get();
+  }
+
   public void setIntakeState (boolean state) {
     intakoid.set(state);
+  }
+
+  public boolean getIntakeState () {
+    return intakoid.get();
   }
 
   public void setClimbState (DoubleSolenoid.Value state) {

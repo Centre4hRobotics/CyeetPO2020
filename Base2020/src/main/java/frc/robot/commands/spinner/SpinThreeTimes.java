@@ -87,12 +87,12 @@ public class SpinThreeTimes extends CommandBase {
       if(spinCount >= 7)
       {
         Timer.delay(0.05);
-        spinner.setSpeed(0);
+        spinner.setPercentOutput(0);
         end(false);
       } 
       else
       {
-        spinner.setSpeed(spinSpeed); 
+        spinner.setPercentOutput(spinSpeed); 
       }
     }
   
@@ -107,6 +107,6 @@ public class SpinThreeTimes extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    spinner.setSpeed(0);
+    spinner.setPercentOutput(0);
   }
 }

@@ -27,7 +27,7 @@ public class Feeder extends SubsystemBase
     unknownSensor2 = new DigitalInput(FeederConstants.kSensor2DIO);*/
   }
 
-  public void setSpeed (double speed)
+  public void setPercentOutput (double speed)
   {
     //Currently backwards!!! Fixed.
       feederMotor.set(ControlMode.PercentOutput, -1*speed);

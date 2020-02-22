@@ -24,13 +24,13 @@ public class FeederFixed extends CommandBase{
     @Override
     public void execute() {
 
-      feeder.setSpeed(speed);
+      feeder.setPercentOutput(speed);
         
     }
 
     @Override
     public void end (boolean interrupted) {
-      feeder.setSpeed(0.0);
+      feeder.setPercentOutput(0.0);
     }
 
     @Override

@@ -5,44 +5,34 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.spinner;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Spinner;
+import frc.robot.subsystems.Shooter;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class TurnToColor extends CommandBase {
-    private double spinSpeed;
-    private Spinner spinner;
-
-  public TurnToColor(Spinner spinner, double spin) {
-    this.spinner = spinner;
-    this.spinSpeed = spin;
-    addRequirements(spinner);
-    }
+public class ShooterVelocityNoReset extends CommandBase {
+    private double speed;
+    private Shooter shooter;
+  public ShooterVelocityNoReset(Shooter shoot, double vel) {
+      shooter = shoot;
+      this.speed = vel;
+    // Use requires() here to declare subsystem dependencies
+    addRequirements(shoot);
+  }
 
   // Called just before this Command runs the first time
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() 
   {
-    // Color Finding Code
-
-    if (spinner.getCurrentColor().equals(spinner.getColorWanted()))
-    {
-      Timer.delay(0.05);
-      end(false);
-    }
-    else {
-      spinner.setPercentOutput(spinSpeed);
-    }
-
+    shooter.setVelocity(speed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -54,6 +44,5 @@ public class TurnToColor extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    spinner.setPercentOutput(0);
   }
 }

@@ -46,7 +46,7 @@ public class Spinner extends SubsystemBase {
       this.p = pcm;
       
       // Rev Color sensor V3
-      colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+      //colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
       
       //Takes a list of Color Val and will compare them to know Vals
       colorMatcher = new ColorMatch();
@@ -86,7 +86,7 @@ public class Spinner extends SubsystemBase {
       colorWantedString = colorTab.add("Color wanted string", "black").withPosition(5,1).withSize(2, 1).getEntry(); //2wide
   }
 
-  public void setSpeed (double speed) {
+  public void setPercentOutput (double speed) {
       motor.set(ControlMode.PercentOutput, speed);
   }
 
@@ -114,11 +114,11 @@ public class Spinner extends SubsystemBase {
 
   public void calculateShuffle (String wanted, Color found)
   {
-    found = getColorSensor().getColor();
+    /*found = getColorSensor().getColor();
     ColorMatchResult colorResult = getColorMatcher().matchClosestColor(found);
     String colorOutput =  getColorString(colorResult);
    // boolean wantedFound = colorOutput != "black" && colorOutput.equals(wanted);
-    updateShuffle(colorOutput, wanted, colorResult.confidence, found);
+    updateShuffle(colorOutput, wanted, colorResult.confidence, found);*/
   }
 
   public String getCurrentColor()

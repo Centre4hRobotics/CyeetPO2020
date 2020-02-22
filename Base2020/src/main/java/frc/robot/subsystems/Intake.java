@@ -11,19 +11,33 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Pneumatics;
 import frc.robot.Constants.CANIDs;
 //import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.IntakeConstants;
 
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase
 { 
 
   private CANSparkMax intakeMotor;
+  private CANPIDController intakePID;
   private Pneumatics p;
+  private double vel;
 
   public Intake(Pneumatics pneumatics) {
     this.p = pneumatics;
     intakeMotor = new CANSparkMax(CANIDs.kIntakeCAN, MotorType.kBrushless);
+    intakePID = intakeMotor.getPIDController();
+
+    intakePID.setP(IntakeConstants.kP);
+    intakePID.setI(IntakeConstants.kI);
+    intakePID.setD(IntakeConstants.kD);
+    intakePID.setIZone(IntakeConstants.kIz);
+    intakePID.setFF(IntakeConstants.kFF);
+    intakePID.setOutputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
+    vel = 0;
   }
 
   public void extend () {
@@ -34,9 +48,22 @@ public class Intake extends SubsystemBase
     p.setIntakeState(false);
   }
 
-  public void setSpeed (double speed)
+  public void setPercentOutput (double speed)
   {
+    if (!p.getIntakeState()) {
+      intakeMotor.set(0);
+      return;
+    }
       intakeMotor.set(speed);
+  }
+
+  public void setVelocity(double vel) {
+    this.vel = vel;
+    intakePID.setReference(vel, ControlType.kVelocity);
+  }
+
+  public double getVelocity () {
+    return vel;
   }
 
   @Override

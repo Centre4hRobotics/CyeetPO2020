@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -82,6 +83,14 @@ public class Shooter extends SubsystemBase {
     p.setShootState(false);
   }
 
+  public void setShootState (boolean state) {
+    p.setShootState(state);
+  }
+
+  public boolean getShootState () {
+    return p.getShootState();
+  }
+
   public double getEncoderPosition (int encoder) {
     if (encoder == 0) {
       return encoder1.getPosition();
@@ -101,17 +110,17 @@ public class Shooter extends SubsystemBase {
   }
 
   //Can make it so setting individual motors also happens, but seems dangerous
-  public void setSpeed (/*int motor, */double speed) {
+  public void setPercentOutput (/*int motor, */double speed) {
     motor1.set(-1*speed);
     motor2.set(speed);
   }
 
-  /*public void setVelocity (double velocity) {
+  public void setVelocity (double velocity) {
     shooterPID.setReference(velocity, ControlType.kVelocity);
     vel = velocity;
   }
 
   public double getVelocity() {
     return vel;
-  }*/
+  }
 }

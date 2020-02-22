@@ -36,7 +36,7 @@ public class IntakeManual extends CommandBase {
   public void execute() 
   {
     double speed = xbc.getTriggerAxis(Hand.kRight)*(xbc.getBumper(Hand.kRight) ? -1:1);
-    intake.setSpeed(Math.abs(speed) < 0.1 ? 0:speed);
+    intake.setPercentOutput(Math.abs(speed) < 0.1 ? 0:speed);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -48,7 +48,7 @@ public class IntakeManual extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-      intake.setSpeed(0.0);
+      intake.setPercentOutput(0.0);
   }
 
 }

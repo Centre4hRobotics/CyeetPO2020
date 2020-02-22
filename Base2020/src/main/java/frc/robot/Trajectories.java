@@ -58,6 +58,7 @@ public final class Trajectories {
     config.setReversed(false) 
     );
 
+    //From auto line to close shot
     public static Trajectory straightToShootThrees = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
@@ -67,6 +68,7 @@ public final class Trajectories {
         config.setReversed(false)
     );
 
+    //From wall to close shot
     public static Trajectory straightBackToShootThrees = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(

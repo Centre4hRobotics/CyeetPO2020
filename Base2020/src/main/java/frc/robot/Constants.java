@@ -59,8 +59,6 @@ public final class Constants {
     public static final int kSensor2DIO = 2;
   }
 
-  public static final class IntakeConstants {}
-
   public static final class SpinnerConstants {
     //Target Colors on spinner
     public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
@@ -70,6 +68,17 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
+    //PID controller constants - need to figure out
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kIz = 0; 
+    public static final double kFF = 0; 
+    public static final double kMaxOutput = 0; 
+    public static final double kMinOutput = 0;
+  }
+
+  public static final class IntakeConstants {
     //PID controller constants - need to figure out
     public static final double kP = 0;
     public static final double kI = 0;
@@ -95,14 +104,14 @@ public final class Constants {
     public static final int kIntakeCAN = 8;
 
     //Indexer TalonSRX CAN ID
-    public static final int kFeederCAN = 12;
+    public static final int kFeederCAN = 14;
 
     //Climber TalonSRX CAN IDs (L/R)
     public static final int kClimberLCAN = 13;
     public static final int kClimberRCAN = 15;
 
     //Spinner TalonSRX CANID
-    public static final int kSpinCAN = 11;
+    public static final int kSpinCAN = 12;
   }
 
   public static final class PneumaticConstants {

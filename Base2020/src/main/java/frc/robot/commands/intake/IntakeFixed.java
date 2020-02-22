@@ -24,13 +24,13 @@ public class IntakeFixed extends CommandBase{
     @Override
     public void execute() {
 
-      intake.setSpeed(speed);
+      intake.setPercentOutput(speed);
         
     }
 
     @Override
     public void end (boolean interrupted) {
-        intake.setSpeed(0.0);
+        intake.setPercentOutput(0.0);
     }
 
     @Override
