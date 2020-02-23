@@ -54,7 +54,8 @@ public class Intake extends SubsystemBase
       intakeMotor.set(0);
       return;
     }
-      intakeMotor.set(speed);
+    //Positive is intake, negative is outtake
+      intakeMotor.set(-1*speed);
   }
 
   public void setVelocity(double vel) {

@@ -30,11 +30,11 @@ public final class Trajectories {
     public static Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(3, -0.5)
+            new Translation2d(2, -0.25)
         ),
-        new Pose2d(6, 0, new Rotation2d(0)),
+        new Pose2d(4, 0, new Rotation2d(0)),
             // Pass config
-        config.setReversed(false)
+        config.setReversed(true)
     );
     
     public static Trajectory straightBackTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -44,7 +44,7 @@ public final class Trajectories {
         ),
         new Pose2d(0, 0, new Rotation2d(0)),
             // Pass config
-        config.setReversed(true) 
+        config.setReversed(true)
     );
 
     public static Trajectory diamond = TrajectoryGenerator.generateTrajectory(
@@ -55,26 +55,43 @@ public final class Trajectories {
         new Translation2d(1,-0.5)
     ),
     new Pose2d(0,0,new Rotation2d(90)),
-    config.setReversed(false) 
+    config.setReversed(false)
     );
 
-    //From auto line to close shot
+    //From auto line to close shot (back frame lined up on auto line)
     public static Trajectory straightToShootThrees = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(1,0)
+            new Translation2d(PathConstants.autoLineToClose/2,0)
         ),
-        new Pose2d(2.41, 0, new Rotation2d(0)),
+        new Pose2d(PathConstants.autoLineToClose, 0, new Rotation2d(0)),
         config.setReversed(false)
+    );
+
+    public static Trajectory fromCloseToRightAuto = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(PathConstants.autoLineToClose, 0, new Rotation2d(0)), 
+        List.of(
+            
+        ), 
+        new Pose2d(0, -1.4, new Rotation2d(0)), 
+        config.setReversed(true)
+    );
+    public static Trajectory fromRightAutoToTrench = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, -1.4, new Rotation2d(0)), 
+        List.of(
+            
+        ), 
+        new Pose2d(-5.1, -1.7, new Rotation2d(0)), 
+        config.setReversed(true)
     );
 
     //From wall to close shot
     public static Trajectory straightBackToShootThrees = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(-0.5,0)
+            new Translation2d(-0.3,0)
         ),
-        new Pose2d(-0.64, 0, new Rotation2d(0)),
+        new Pose2d(-0.6, 0, new Rotation2d(0)),
         config.setReversed(true)
     );
 }

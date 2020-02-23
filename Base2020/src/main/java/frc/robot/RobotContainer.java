@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -50,8 +51,8 @@ public class RobotContainer {
   private final Pneumatics p_pneumatics;
 
   // The driver's controller
-  private final XboxController c_driver;
-  private final Joystick c_function1, c_function2;
+  private final XboxController c_driver, c_function2;
+  private final Joystick c_function1;
 
   //private SendableChooser<Command> autoselect;
 
@@ -61,7 +62,7 @@ public class RobotContainer {
   public RobotContainer() {
     c_driver = new XboxController(OIConstants.kDriverControllerPort);
     c_function1 = new Joystick(OIConstants.kFunctionControllerPorts[0]);
-    c_function2 = new Joystick(OIConstants.kFunctionControllerPorts[1]); 
+    c_function2 = new XboxController(OIConstants.kFunctionControllerPorts[1]); 
     ntinst = NetworkTableInstance.getDefault();
     p_pneumatics = new Pneumatics();
 
@@ -72,13 +73,13 @@ public class RobotContainer {
     //m_shooter.setDefaultCommand(new ShooterFixed(m_shooter, 0.0));
 
     m_climber = new Climber (p_pneumatics);
-    m_climber.setDefaultCommand(new ManualWinch(m_climber, c_function1, c_function2, 1));
+    m_climber.setDefaultCommand(new ManualClimber(m_climber, c_function2, 1));
 
     m_intake = new Intake (p_pneumatics);
     //m_intake.setDefaultCommand(new IntakeFixed(m_intake, 0.0));
 
     m_feeder = new Feeder ();
-    //m_feeder.setDefaultCommand(new FeederFixed(m_feeder, 0.0));
+    m_feeder.setDefaultCommand(new FeederManual(m_feeder, c_function1, 0.3));
 
     m_drive = new Drive();
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, c_driver, 1.0));
@@ -100,38 +101,47 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       //Drive commands
-      new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
-      new JoystickButton(c_driver, Button.kY.value).whenPressed (new RunTrajectory(m_drive, Trajectories.straightToShootThrees).andThen(new Stop(m_drive)));
-      new JoystickButton(c_driver, Button.kX.value).whenPressed (new RunTrajectory(m_drive, Trajectories.straightBackToShootThrees).andThen(new Stop(m_drive)));
+      //new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
 
       //Feeder commands
-      new JoystickButton(c_function1, 1).whileHeld(new FeederFixed(m_feeder, 0.3));
-      new JoystickButton(c_function1, 9).whileHeld(new FeederFixed(m_feeder, -0.3));
+      /*new JoystickButton(c_function1, 1).whileHeld(new FeederFixed(m_feeder, 0.3));
+      new JoystickButton(c_function1, 9).whileHeld(new FeederFixed(m_feeder, -0.3));*/
 
       //Spinner commands
-      new JoystickButton(c_function1, 4).whileHeld(new SpinnerFixed(m_spinner, 0.3));
-      new JoystickButton(c_function1, 5).whileHeld(new SpinnerFixed(m_spinner, -0.3));
-      new JoystickButton(c_function1, 7).whenPressed(new SpinnerExtend(m_spinner));
-      new JoystickButton(c_function1, 6).whenPressed(new SpinnerRetract(m_spinner));
+      new JoystickButton(c_function1, 7).whileHeld(new SpinnerFixed(m_spinner, 0.3));
+      new JoystickButton(c_function1, 8).whileHeld(new SpinnerFixed(m_spinner, -0.3));
+      new JoystickButton(c_function1, 11).whenPressed(new SpinnerExtend(m_spinner))
+          .whenReleased(new SpinnerRetract(m_spinner));
 
       //Intake commands
-      new JoystickButton(c_function2, 1).whileHeld(new IntakeFixed(m_intake, 0.6));
-      new JoystickButton(c_function2, 2).whileHeld(new IntakeFixed(m_intake, -0.6));
-      new JoystickButton(c_function1, 8).whenPressed(new IntakeRetract(m_intake));
-      new JoystickButton(c_function2, 3).whenPressed(new IntakeExtend(m_intake));
+      new JoystickButton(c_function2, 6).whileHeld(new IntakeFixed(m_intake, 0.6));
+      new JoystickButton(c_function2, 5).whileHeld(new IntakeFixed(m_intake, -0.6));
+      new JoystickButton(c_function1, 9).whenPressed(new IntakeRetract(m_intake))
+          .whenReleased(new IntakeExtend(m_intake));
 
       //Climber commands
-      new JoystickButton(c_function1, 10).whenPressed(new ClimberPistonRetract(m_climber));
+      /*new JoystickButton(c_function1, 10).whenPressed(new ClimberPistonRetract(m_climber));
       new JoystickButton(c_function2, 9).whenPressed(new ClimberPistonOff(m_climber));
-      new JoystickButton(c_function2, 10).whenPressed(new ClimberPistonExtend(m_climber));
+      new JoystickButton(c_function2, 10).whenPressed(new ClimberPistonExtend(m_climber));*/
 
       //Shooter commands
-      new JoystickButton(c_function2, 4).whenPressed(new ShooterExtend(m_shooter));
-      new JoystickButton(c_function2, 5).whenPressed(new ShooterRetract(m_shooter));
-      new JoystickButton(c_function2, 6).whileHeld(new ShooterFixed(m_shooter, 0.6));
-      new JoystickButton(c_function2, 7).whileHeld(new ShooterFixed(m_shooter, 0.9));
-      new JoystickButton(c_function2, 8).whileHeld(new ShooterFixed(m_shooter, 1.0));
-      new JoystickButton(c_function1, 2).whileHeld(new ShooterFixed(m_shooter, -0.3));
+      //Spin up while running path!!!
+      new JoystickButton(c_function1, 1).whileHeld (
+        new SequentialCommandGroup(
+          new ZeroPosition(m_drive),
+          new RunTrajectory(m_drive, Trajectories.straightBackToShootThrees),
+          new Stop(m_drive),
+          new ShooterRetract(m_shooter),
+          new ShooterFixed(m_shooter, 0.6).withTimeout(0.3),
+          new ParallelCommandGroup( 
+            new ShooterFixed(m_shooter, 0.6),
+            new FeederFixed (m_feeder, 0.3)
+        )));
+      new JoystickButton(c_function1, 10).whenPressed(new ShooterExtend(m_shooter))
+          .whenReleased(new ShooterRetract(m_shooter));
+      new JoystickButton(c_function1, 2).whileHeld(new ShooterFixed(m_shooter, 0.6));
+      new JoystickButton(c_function1, 4).whileHeld(new ShooterFixed(m_shooter, 0.9));
+      new JoystickButton(c_function1, 3).whileHeld(new ShooterFixed(m_shooter, 1.0));
   }
 
 
@@ -144,17 +154,31 @@ public class RobotContainer {
     String selected = "ShootThenDrive";//SmartDashboard.getString("Auto Selector", "Default");
     if (selected.equalsIgnoreCase("ShootThenDrive")) {
       return new SequentialCommandGroup(
-        new DriveStraight(m_drive, 0.5).withTimeout(1.3),
+        new ParallelDeadlineGroup (
+          new RunTrajectory(m_drive, Trajectories.straightToShootThrees),
+          new ShooterFixed(m_shooter, 0.6)
+        ),
+        new Stop(m_drive),
         new ShooterRetract(m_shooter),
-        new ShooterFixed(m_shooter, 0.7).withTimeout(0.3),
         new ParallelCommandGroup( 
-          new ShooterFixed(m_shooter, 0.7),
+          new ShooterFixed(m_shooter, 0.6),
           new FeederFixed (m_feeder, 0.3)
-        ).withTimeout(8)
+        ).withTimeout(3),
+        new IntakeExtend(m_intake),
+        new RunTrajectory(m_drive, Trajectories.fromCloseToRightAuto),
+        new ParallelDeadlineGroup (
+          new RunTrajectory(m_drive, Trajectories.fromRightAutoToTrench),
+          new IntakeFixed(m_intake, 0.6),
+          new FeederFixed(m_feeder, 0.3)
+        ),
+        new Stop(m_drive)
       );
     }
     if (selected.equalsIgnoreCase("Auto Line")) {
       return new DriveStraight(m_drive, 0.4).withTimeout(1);
+    } 
+    if (selected.equalsIgnoreCase("example")) {
+      return new RunTrajectory(m_drive, Trajectories.exampleTrajectory).andThen(new Stop(m_drive));
     }
     return new Stop(m_drive);
 

@@ -27,7 +27,7 @@ public class ArcadeDrive extends CommandBase{
 
     @Override
     public void execute() {
-        double xSpeed = -1*xbc.getY(Hand.kLeft), zRotation = xbc.getX(Hand.kLeft);
+        double xSpeed = (xbc.getBumper(Hand.kLeft)?1:-1)*xbc.getY(Hand.kLeft), zRotation = xbc.getX(Hand.kLeft);
         dtrain.arcadeDrive(xSpeed, zRotation, maxOutput);
     }
 

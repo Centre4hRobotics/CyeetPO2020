@@ -34,7 +34,7 @@ public class Climber extends SubsystemBase {
   
   public void setRSpeed(double speed)
   {
-    climberR.set(ControlMode.PercentOutput, speed);
+    climberR.set(ControlMode.PercentOutput, -1*speed);
   }  
 
   public void setLSpeed(double speed)
@@ -44,12 +44,12 @@ public class Climber extends SubsystemBase {
 
   public void extend()
   {
-  p.setClimbState(DoubleSolenoid.Value.kForward);
+  p.setClimbState(DoubleSolenoid.Value.kReverse);
   }
 
   public void retract()
   {
-  p.setClimbState(DoubleSolenoid.Value.kReverse);
+  p.setClimbState(DoubleSolenoid.Value.kForward);
   }
 
   public void pistonOff()
