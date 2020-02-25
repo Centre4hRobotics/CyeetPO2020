@@ -115,6 +115,11 @@ public class Shooter extends SubsystemBase {
     motor2.set(speed);
   }
 
+  public void setVoltage (double volts) {
+    motor1.setVoltage(-1*volts);
+    motor2.setVoltage(volts);
+  }
+
   public void setVelocity (double velocity) {
     shooterPID.setReference(velocity, ControlType.kVelocity);
     vel = velocity;

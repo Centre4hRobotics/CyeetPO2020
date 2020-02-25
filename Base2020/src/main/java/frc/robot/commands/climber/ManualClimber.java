@@ -31,8 +31,8 @@ public class ManualClimber extends CommandBase{
         double rs = f2.getY(Hand.kRight), ls = f2.getY(Hand.kLeft);
         climber.setLSpeed((Math.abs(ls)<0.2 ? 0:ls)*mx);
         climber.setRSpeed((Math.abs(rs)<0.2 ? 0:rs)*mx);
-        if (f2.getStartButtonPressed()) climber.extend();
-        if (f2.getBackButtonPressed()) climber.retract();
+        /*if (f2.getStartButtonPressed()) climber.extend();
+        if (f2.getBackButtonPressed()) climber.retract();*/
       } else {
         climber.setLSpeed(0);
         climber.setRSpeed(0);

@@ -145,4 +145,11 @@ public final class Constants {
   public static final class PathConstants {
     public static final double autoLineToClose = 1.63;
   }
+
+  public static final class ShootSpeedConstants {
+    public static final double frontTrenchVolts = 8.5;
+    public static final double shortTrenchAutoVolts = 8.7;
+    public static final double farTrenchVolts = 9.3;
+    public static final double shortShotVolts = 7.2;
+  }
 }

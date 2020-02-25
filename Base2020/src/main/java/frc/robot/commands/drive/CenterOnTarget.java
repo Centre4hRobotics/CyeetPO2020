@@ -5,45 +5,59 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.drive;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Robot;
+import frc.robot.subsystems.Drive;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ShooterFixed extends CommandBase {
-    private double v;
-    private Shooter shooter;
-  public ShooterFixed(Shooter shoot, double volts) {
-      shooter = shoot;
-      this.v = volts;
+public class CenterOnTarget extends CommandBase {
+
+    private Drive drivetrain;
+    private NetworkTableInstance nt;
+  public CenterOnTarget(Drive drive, NetworkTableInstance ntinst) {
     // Use requires() here to declare subsystem dependencies
-    addRequirements(shoot);
+    drivetrain = drive;
+    nt = ntinst;
+
+    addRequirements(drive);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
+    nt.getTable("Test").getEntry("Steer").setNumber(0);
   }
 
   // Called repeatedly when this Command is scheduled to run
-  @Override
   public void execute() 
   {
-    shooter.setVoltage(v);
+    /*if (!Robot.ntinst.getTable("Vision").getEntry("Contour Found").getBoolean(false)) {
+        end();
+        return;
+    }*/
+
+    double xCenter = nt.getTable("Vision").getEntry("XCenter").getDouble(0.0)+0.063;
+    double steer = 0.8*Math.copySign(Math.pow(Math.abs(xCenter), 1), xCenter); //Can modify how it steers here
+    if (Math.abs(steer)<0.28 && Math.abs(steer)>0.03) steer = Math.copySign(0.28, steer);
+    nt.getTable("Test").getEntry("Steer").setNumber(steer);
+    drivetrain.arcadeDrive(0, steer);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(nt.getTable("Vision").getEntry("XCenter").getDouble(0.0)+0.063)<0.03;
   }
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-      shooter.setPercentOutput(0);
+    drivetrain.tankDriveVolts(0,0);
   }
 }

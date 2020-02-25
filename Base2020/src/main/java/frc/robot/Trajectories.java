@@ -19,7 +19,7 @@ public final class Trajectories {
         10);
 
 // Create config for trajectory
-    private static TrajectoryConfig config =
+    private static TrajectoryConfig normalConfig =
     new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
                          AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
@@ -34,7 +34,7 @@ public final class Trajectories {
         ),
         new Pose2d(4, 0, new Rotation2d(0)),
             // Pass config
-        config.setReversed(true)
+        normalConfig.setReversed(true)
     );
     
     public static Trajectory straightBackTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -44,7 +44,7 @@ public final class Trajectories {
         ),
         new Pose2d(0, 0, new Rotation2d(0)),
             // Pass config
-        config.setReversed(true)
+        normalConfig.setReversed(true)
     );
 
     public static Trajectory diamond = TrajectoryGenerator.generateTrajectory(
@@ -55,7 +55,7 @@ public final class Trajectories {
         new Translation2d(1,-0.5)
     ),
     new Pose2d(0,0,new Rotation2d(90)),
-    config.setReversed(false)
+    normalConfig.setReversed(false)
     );
 
     //From auto line to close shot (back frame lined up on auto line)
@@ -65,7 +65,7 @@ public final class Trajectories {
             new Translation2d(PathConstants.autoLineToClose/2,0)
         ),
         new Pose2d(PathConstants.autoLineToClose, 0, new Rotation2d(0)),
-        config.setReversed(false)
+        normalConfig.setReversed(false)
     );
 
     public static Trajectory fromCloseToRightAuto = TrajectoryGenerator.generateTrajectory(
@@ -74,7 +74,7 @@ public final class Trajectories {
             
         ), 
         new Pose2d(0, -1.4, new Rotation2d(0)), 
-        config.setReversed(true)
+        normalConfig.setReversed(true)
     );
     public static Trajectory fromRightAutoToTrench = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, -1.4, new Rotation2d(0)), 
@@ -82,7 +82,7 @@ public final class Trajectories {
             
         ), 
         new Pose2d(-5.1, -1.7, new Rotation2d(0)), 
-        config.setReversed(true)
+        normalConfig.setReversed(true)
     );
 
     //From wall to close shot
@@ -92,6 +92,25 @@ public final class Trajectories {
             new Translation2d(-0.3,0)
         ),
         new Pose2d(-0.6, 0, new Rotation2d(0)),
-        config.setReversed(true)
+        normalConfig.setReversed(true)
+    );
+
+    //Starting with front frame on auto line, pick up first trench ball
+    public static Trajectory fromRightAutoToShortTrench = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)), 
+        List.of(
+            new Translation2d(-1, 0)
+        ), 
+        new Pose2d(-2.33, 0, new Rotation2d(0)), 
+        normalConfig.setReversed(true)
+    );
+
+    public static Trajectory fromShortTrenchToFarTrench = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(-2.33, 0, new Rotation2d(0)), 
+        List.of(
+            
+        ), 
+        new Pose2d(-4.23, 0, new Rotation2d(0)), 
+        normalConfig.setReversed(true)
     );
 }

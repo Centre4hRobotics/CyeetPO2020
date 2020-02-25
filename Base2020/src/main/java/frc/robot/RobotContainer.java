@@ -79,7 +79,7 @@ public class RobotContainer {
     //m_intake.setDefaultCommand(new IntakeFixed(m_intake, 0.0));
 
     m_feeder = new Feeder ();
-    m_feeder.setDefaultCommand(new FeederManual(m_feeder, c_function1, 0.3));
+    m_feeder.setDefaultCommand(new FeederManual(m_feeder, c_function1, 0.5, 0.3));
 
     m_drive = new Drive();
     m_drive.setDefaultCommand(new ArcadeDrive(m_drive, c_driver, 1.0));
@@ -102,6 +102,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
       //Drive commands
       //new JoystickButton(c_driver, Button.kA.value).whenPressed (new ZeroPosition(m_drive));
+      new JoystickButton(c_driver, Button.kA.value).whileHeld(new CenterOnTarget(m_drive, ntinst));
 
       //Feeder commands
       /*new JoystickButton(c_function1, 1).whileHeld(new FeederFixed(m_feeder, 0.3));
@@ -114,8 +115,8 @@ public class RobotContainer {
           .whenReleased(new SpinnerRetract(m_spinner));
 
       //Intake commands
-      new JoystickButton(c_function2, 6).whileHeld(new IntakeFixed(m_intake, 0.6));
-      new JoystickButton(c_function2, 5).whileHeld(new IntakeFixed(m_intake, -0.6));
+      new JoystickButton(c_function1, 6).whileHeld(new IntakeFixed(m_intake, 0.6));
+      new JoystickButton(c_function1, 5).whileHeld(new IntakeFixed(m_intake, -0.6));
       new JoystickButton(c_function1, 9).whenPressed(new IntakeRetract(m_intake))
           .whenReleased(new IntakeExtend(m_intake));
 
@@ -129,19 +130,23 @@ public class RobotContainer {
       new JoystickButton(c_function1, 1).whileHeld (
         new SequentialCommandGroup(
           new ZeroPosition(m_drive),
-          new RunTrajectory(m_drive, Trajectories.straightBackToShootThrees),
+          new ParallelDeadlineGroup(
+            new RunTrajectory(m_drive, Trajectories.straightBackToShootThrees),
+            new FeederFixed(m_feeder, -0.2)
+          ),
           new Stop(m_drive),
           new ShooterRetract(m_shooter),
-          new ShooterFixed(m_shooter, 0.6).withTimeout(0.3),
+          new ShooterFixed(m_shooter, ShootSpeedConstants.shortShotVolts).withTimeout(0.3),
           new ParallelCommandGroup( 
-            new ShooterFixed(m_shooter, 0.6),
+            new ShooterFixed(m_shooter, ShootSpeedConstants.shortShotVolts),
             new FeederFixed (m_feeder, 0.3)
         )));
       new JoystickButton(c_function1, 10).whenPressed(new ShooterExtend(m_shooter))
           .whenReleased(new ShooterRetract(m_shooter));
-      new JoystickButton(c_function1, 2).whileHeld(new ShooterFixed(m_shooter, 0.6));
-      new JoystickButton(c_function1, 4).whileHeld(new ShooterFixed(m_shooter, 0.9));
-      new JoystickButton(c_function1, 3).whileHeld(new ShooterFixed(m_shooter, 1.0));
+      new JoystickButton(c_function1, 2).whileHeld(new ShooterFixed(m_shooter, ShootSpeedConstants.shortShotVolts));
+      //Top left is 4, bottom left is 3
+      new JoystickButton(c_function1, 4).whileHeld(new ShooterFixed(m_shooter, ShootSpeedConstants.frontTrenchVolts));
+      new JoystickButton(c_function1, 3).whileHeld(new ShooterFixed(m_shooter, ShootSpeedConstants.farTrenchVolts));
   }
 
 
@@ -151,17 +156,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    String selected = "ShootThenDrive";//SmartDashboard.getString("Auto Selector", "Default");
+    String selected = "rightauto";//SmartDashboard.getString("Auto Selector", "Default");
     if (selected.equalsIgnoreCase("ShootThenDrive")) {
       return new SequentialCommandGroup(
         new ParallelDeadlineGroup (
           new RunTrajectory(m_drive, Trajectories.straightToShootThrees),
-          new ShooterFixed(m_shooter, 0.6)
+          new ShooterFixed(m_shooter, ShootSpeedConstants.shortShotVolts)
         ),
         new Stop(m_drive),
         new ShooterRetract(m_shooter),
         new ParallelCommandGroup( 
-          new ShooterFixed(m_shooter, 0.6),
+          new ShooterFixed(m_shooter, ShootSpeedConstants.shortShotVolts),
           new FeederFixed (m_feeder, 0.3)
         ).withTimeout(3),
         new IntakeExtend(m_intake),
@@ -172,6 +177,43 @@ public class RobotContainer {
           new FeederFixed(m_feeder, 0.3)
         ),
         new Stop(m_drive)
+      );
+    }
+    if (selected.equalsIgnoreCase("RightAuto")) {
+      return new SequentialCommandGroup(
+        new IntakeExtend(m_intake),
+        new ShooterExtend(m_shooter),
+        new ParallelDeadlineGroup (
+          new SequentialCommandGroup(
+            new RunTrajectory(m_drive, Trajectories.fromRightAutoToShortTrench),
+            new Stop(m_drive),
+            new CenterOnTarget(m_drive, ntinst)
+          ),
+          new ShooterFixed(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts),
+          new SequentialCommandGroup(
+            new IntakeFixed(m_intake, 0.0).withTimeout(0.3),
+            new IntakeFixed(m_intake, 0.6)
+          )
+        ),
+        new ParallelCommandGroup(
+          new ShooterFixed(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts),
+          new FeederFixed(m_feeder, 0.3),
+          new IntakeFixed(m_intake, 0.6)
+        ).withTimeout(4),
+        new ParallelDeadlineGroup(
+          new SequentialCommandGroup(
+            new RunTrajectory(m_drive, Trajectories.fromShortTrenchToFarTrench),
+            new Stop(m_drive),
+            new CenterOnTarget(m_drive, ntinst)
+          ),
+          new ShooterFixed(m_shooter, ShootSpeedConstants.farTrenchVolts),
+          new IntakeFixed(m_intake, 0.6)
+        ),
+        new ParallelCommandGroup(
+          new ShooterFixed(m_shooter, ShootSpeedConstants.farTrenchVolts),
+          new FeederFixed(m_feeder, 0.4),
+          new IntakeFixed(m_intake, 0.6)
+        )
       );
     }
     if (selected.equalsIgnoreCase("Auto Line")) {
