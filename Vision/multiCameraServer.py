@@ -283,7 +283,7 @@ if __name__ == "__main__":
         #print("In loop")
         # (cv_sink, output_stream, img)
         
-        for index, (cv_sink, output_stream, img) in enumerate(input_output[:2]):
+        for index, (cv_sink, output_stream, img) in enumerate(input_output[:1]):
             time, img  = cv_sink.grabFrame(img)
             
 
@@ -304,8 +304,8 @@ if __name__ == "__main__":
             # light_mask = cv2.inRange(hsl, (0, 0, 150), (0, 0, 255))
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             #Segmentation
-            greenLow = (50, 53, 55)
-            greenUp = (92, 255, 223) 
+            greenLow = (65, 53, 144)
+            greenUp = (92, 255, 255) 
             green_mask = cv2.inRange(hsv, greenLow, greenUp)
 
             mask = green_mask #- light_mask - oversaturation_mask
