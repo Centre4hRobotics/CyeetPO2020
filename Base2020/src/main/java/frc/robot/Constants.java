@@ -144,8 +144,8 @@ public final class Constants {
 
   public static final class PathConstants {
     public static final double autoLineToClose = 1.63;
-    public static final double angleFromShortTrench = 17.0;//17.0207
-    public static final double angleFromFarTrench = 13.0;//12.9675
+    public static final double angleFromShortTrench = -17.0;//17.0207
+    public static final double angleFromFarTrench = -13.0;//12.9675
   }
 
   public static final class ShootSpeedConstants {
