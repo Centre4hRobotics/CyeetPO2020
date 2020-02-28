@@ -98,7 +98,7 @@ public class RobotContainer {
   }
 
   public void autoChooserInit() {
-    String[] autoselector = {"AutoLine", "CenterUpThenTrench", "RightAuto", "CenterUp"};
+    String[] autoselector = {"AutoLine", "CenterUpThenTrench", "RightAuto", "CenterUp", "RightAutoTTA"};
     SmartDashboard.putStringArray("Auto List", autoselector);
     /*autoselect = new SendableChooser<String>();
     autoselect.addOption("AutoLine", "AutoLine");
@@ -249,6 +249,44 @@ public class RobotContainer {
           new ShooterVolts(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts),
           new IntakeFixed(m_intake, 1),
           new FeederFixed(m_feeder, 0.5)
+        )
+      );
+    }
+    //Back into trench, score 4, back again, score 2 - using turn to angle instead of vision
+    if (selected.equalsIgnoreCase("RightAutoTTA")) {
+      return new SequentialCommandGroup(
+        new IntakeExtend(m_intake),
+        new ShooterExtend(m_shooter),
+        new ParallelDeadlineGroup (
+          new SequentialCommandGroup(
+            new RunTrajectory(m_drive, Trajectories.fromRightAutoToShortTrench),
+            new Stop(m_drive),
+            new TurnToAngle(m_drive, PathConstants.angleFromShortTrench)
+          ),
+          new ShooterVolts(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts),
+          new SequentialCommandGroup(
+            new IntakeFixed(m_intake, 0.0).withTimeout(0.6),
+            new IntakeFixed(m_intake, 1)
+          )
+        ),
+        new ParallelCommandGroup(
+          new ShooterVolts(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts),
+          new FeederFixed(m_feeder, 0.4),
+          new IntakeFixed(m_intake, 1)
+        ).withTimeout(4),
+        new ParallelDeadlineGroup(
+          new SequentialCommandGroup(
+            new RunTrajectory(m_drive, Trajectories.fromShortTrenchToFarTrench),
+            new Stop(m_drive),
+            new TurnToAngle(m_drive, PathConstants.angleFromFarTrench)
+          ),
+          new ShooterVolts(m_shooter, ShootSpeedConstants.farTrenchVolts),
+          new IntakeFixed(m_intake, 1)
+        ),
+        new ParallelCommandGroup(
+          new ShooterVolts(m_shooter, ShootSpeedConstants.farTrenchVolts),
+          new FeederFixed(m_feeder, 0.4),
+          new IntakeFixed(m_intake, 1)
         )
       );
     }
