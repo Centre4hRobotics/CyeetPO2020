@@ -9,11 +9,11 @@ import frc.robot.subsystems.Feeder;
 public class FeederManual extends CommandBase{
 
   private Feeder feeder;
-  private double mx, slow;
+  private double fast, slow;
   private Joystick f1;
-    public FeederManual (Feeder feederUsed, Joystick function1, double maxSpeed, double slowSpeed) {
+    public FeederManual (Feeder feederUsed, Joystick function1, double fastSpeed, double slowSpeed) {
       feeder = feederUsed;
-      this.mx = maxSpeed;
+      this.fast = fastSpeed;
       slow = slowSpeed;
       f1 = function1;
       addRequirements(feeder);
@@ -31,9 +31,8 @@ public class FeederManual extends CommandBase{
       if (Math.abs(speed)<0.5) {
         feeder.setPercentOutput(-1*slow*f1.getY());
       } else {
-        feeder.setPercentOutput(mx*speed);
+        feeder.setPercentOutput(-1*fast*speed);
       }
-      
     }
 
     @Override

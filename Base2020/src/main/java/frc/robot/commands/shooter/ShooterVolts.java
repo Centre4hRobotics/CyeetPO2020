@@ -13,10 +13,10 @@ import frc.robot.subsystems.Shooter;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ShooterFixed extends CommandBase {
+public class ShooterVolts extends CommandBase {
     private double v;
     private Shooter shooter;
-  public ShooterFixed(Shooter shoot, double volts) {
+  public ShooterVolts(Shooter shoot, double volts) {
       shooter = shoot;
       this.v = volts;
     // Use requires() here to declare subsystem dependencies

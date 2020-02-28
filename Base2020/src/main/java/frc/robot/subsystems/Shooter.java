@@ -31,7 +31,7 @@ public class Shooter extends SubsystemBase {
 
   private CANSparkMax motor1, motor2;
   private CANPIDController shooterPID;
-  private CANEncoder encoder1, encoder2;
+  private CANEncoder encoder;
   private ShuffleboardTab tab;
   private ArrayList<NetworkTableEntry> entries;
   private Pneumatics p;
@@ -41,27 +41,27 @@ public class Shooter extends SubsystemBase {
     this.p = pcm;
     motor1 = new CANSparkMax(CANIDs.kSM1CAN, MotorType.kBrushless);
     motor2 = new CANSparkMax(CANIDs.kSM2CAN, MotorType.kBrushless);
+    motor1.setInverted(false);
+    motor2.follow(motor1, true);
 
-    /*shooterPID = motor1.getPIDController();
+    shooterPID = motor1.getPIDController();
     shooterPID.setP(ShooterConstants.kP);
     shooterPID.setI(ShooterConstants.kI);
     shooterPID.setD(ShooterConstants.kD);
     shooterPID.setIZone(ShooterConstants.kIz);
     shooterPID.setFF(ShooterConstants.kFF);
     shooterPID.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
-    vel = 0;*/
+    vel = 0;
 
-    encoder1 = motor1.getEncoder();
-    encoder2 = motor2.getEncoder();
-    motor1.setInverted(false);
-    motor2.setInverted(false);
+    encoder = motor1.getEncoder();
 
     tab = Shuffleboard.getTab("Shooter");
-    entries = new ArrayList<NetworkTableEntry> (4);
-    entries.add(tab.add("PosEncoder1", 0).getEntry());
-    entries.add(tab.add("PosEncoder2", 0).getEntry());
-    entries.add(tab.add("VelEncoder1", 0).getEntry());
-    entries.add(tab.add("VelEncoder2", 0).getEntry());
+    entries = new ArrayList<NetworkTableEntry> (5);
+    entries.add(tab.add("PosEncoder", 0).getEntry());
+    entries.add(tab.add("VelEncoder", 0).getEntry());
+    entries.add(tab.add("P Gain", ShooterConstants.kP).getEntry());
+    entries.add(tab.add("I Gain", ShooterConstants.kI).getEntry());
+    entries.add(tab.add("D Gain", ShooterConstants.kD).getEntry());
   }
 
   @Override
@@ -70,10 +70,14 @@ public class Shooter extends SubsystemBase {
   }
 
   private void updateShuffleboard () {
-    entries.get(0).setNumber(getEncoderPosition(0));
-    entries.get(1).setNumber(getEncoderPosition(1));
-    entries.get(2).setNumber(getEncoderVelocity(0));
-    entries.get(3).setNumber(getEncoderVelocity(1));
+    entries.get(0).setNumber(getEncoderPosition());
+    entries.get(1).setNumber(getEncoderVelocity());
+  }
+
+  public void updatePIDGains() {
+    shooterPID.setP(entries.get(2).getDouble(ShooterConstants.kP));
+    shooterPID.setI(entries.get(3).getDouble(ShooterConstants.kI));
+    shooterPID.setP(entries.get(4).getDouble(ShooterConstants.kD));
   }
 
   public void extend() {
@@ -91,33 +95,21 @@ public class Shooter extends SubsystemBase {
     return p.getShootState();
   }
 
-  public double getEncoderPosition (int encoder) {
-    if (encoder == 0) {
-      return encoder1.getPosition();
-    } else if (encoder == 1) {
-      return encoder2.getPosition();
-    }
-    return 0;
+  public double getEncoderPosition () {
+    return encoder.getPosition();
   }
 
-  public double getEncoderVelocity (int encoder) {
-    if (encoder == 0) {
-      return encoder1.getVelocity();
-    } else if (encoder == 1) {
-      return encoder2.getVelocity();
-    }
-    return 0;
+  public double getEncoderVelocity () {
+    return encoder.getVelocity();
   }
 
   //Can make it so setting individual motors also happens, but seems dangerous
   public void setPercentOutput (/*int motor, */double speed) {
     motor1.set(-1*speed);
-    motor2.set(speed);
   }
 
   public void setVoltage (double volts) {
     motor1.setVoltage(-1*volts);
-    motor2.setVoltage(volts);
   }
 
   public void setVelocity (double velocity) {

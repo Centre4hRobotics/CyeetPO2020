@@ -85,6 +85,15 @@ public final class Trajectories {
         normalConfig.setReversed(true)
     );
 
+    public static Trajectory fromCloseToRightAutoToTrench = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(PathConstants.autoLineToClose, 0, new Rotation2d(0)), 
+        List.of(
+            new Translation2d(0,-1.4)
+        ), 
+        new Pose2d(-5.1, -1.7, new Rotation2d(0)), 
+        normalConfig.setReversed(true)
+    );
+
     //From wall to close shot
     public static Trajectory straightBackToShootThrees = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
@@ -112,5 +121,12 @@ public final class Trajectories {
         ), 
         new Pose2d(-4.23, 0, new Rotation2d(0)), 
         normalConfig.setReversed(true)
+    );
+
+    public static Trajectory feederStationToIntakeExtend = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)), 
+        List.of(), 
+        new Pose2d(0.25, 0, new Rotation2d(0)),
+        normalConfig.setReversed(false)
     );
 }

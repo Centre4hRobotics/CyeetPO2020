@@ -68,7 +68,7 @@ public class Drive extends SubsystemBase {
                   DriveConstants.kRightEncoderReversed);*/
 
   // The gyro sensor
-  private final AHRS navx;
+  private AHRS navx = null;
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
@@ -125,7 +125,9 @@ public class Drive extends SubsystemBase {
     entries.get("Pose").setString(getPose().toString());
     entries.get("RightWheelSpeed").setNumber(getWheelSpeeds().rightMetersPerSecond);
     entries.get("LeftWheelSpeed").setNumber(getWheelSpeeds().leftMetersPerSecond);
-    entries.get("NavX Yaw").setNumber(navx.getYaw());
+    if (navx != null) {
+      entries.get("NavX Yaw").setNumber(navx.getYaw());
+    }
   }
 
   @Override
@@ -310,10 +312,19 @@ public class Drive extends SubsystemBase {
   /**
    * Returns the heading of the robot.
    *
-   * @return the robot's heading in degrees, from 180 to 180
+   * @return the robot's heading in degrees, from 0 to 360
    */
   public double getHeading() {
     return Math.IEEEremainder(navx.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  /**
+   * 
+   * @return navx yaw, from -180 to 180
+   */
+
+  public double getYaw() {
+    return navx.getYaw();
   }
 
   /**
