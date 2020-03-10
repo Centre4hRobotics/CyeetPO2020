@@ -87,6 +87,7 @@ public final class Constants {
     public static final double kFF = 0; 
     public static final double kMaxOutput = 0; 
     public static final double kMinOutput = 0;
+    public static final double kIntakeSpeed = 0.8;
   }
 
   public static final class CANIDs {
@@ -150,8 +151,8 @@ public final class Constants {
 
   public static final class ShootSpeedConstants {
     public static final double frontTrenchVolts = 8.5;
-    public static final double shortTrenchAutoVolts = 8.7;
-    public static final double farTrenchVolts = 9.3;
+    public static final double shortTrenchAutoVolts = 9.5;//8.7;
+    public static final double farTrenchVolts = 9.75;//9.3;
     public static final double shortShotVolts = 7.2;
   }
 }

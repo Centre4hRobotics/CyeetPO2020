@@ -117,17 +117,26 @@ public final class Trajectories {
         List.of(
             new Translation2d(-1, 0)
         ), 
-        new Pose2d(-2.33, 0, new Rotation2d(0)), 
-        getNewDefaultConfig().setReversed(true)
+        new Pose2d(-2.38, 0, new Rotation2d(0)), 
+        getNewConfigWithVA(2,2).setReversed(true)
     );
 
     public static Trajectory fromShortTrenchToFarTrench = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(-2.33, 0, new Rotation2d(0)), 
+        new Pose2d(-2.38, 0, new Rotation2d(0)), 
         List.of(
             
         ), 
         new Pose2d(-4.23, 0, new Rotation2d(0)), 
-        getNewDefaultConfig().setReversed(true)
+        getNewConfigWithVA(2,2).setReversed(true)
+    );
+
+    public static Trajectory fromFarTrenchToShortTrench = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(-4.23, 0, new Rotation2d(0)), 
+        List.of(
+            
+        ), 
+        new Pose2d(-2.38, 0, new Rotation2d(0)), 
+        getNewConfigWithVA(2,2)
     );
 
     public static Trajectory feederStationToIntakeExtend = TrajectoryGenerator.generateTrajectory(
