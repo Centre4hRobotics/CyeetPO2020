@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public final class Constants {
   public static final class DriveConstants {
-    public static final boolean testMode = true;
+    public static final boolean testMode = false;
 
     //Drive controller constants
     public static final boolean squareSpeedInput = false;
@@ -84,8 +84,8 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kIz = 0; 
-    public static final double kFF = 0; 
-    public static final double kMaxOutput = 0; 
+    public static final double kFF = 0.00017794; // 1/5580 + 0.5/2830 over 2
+    public static final double kMaxOutput = 1; 
     public static final double kMinOutput = 0;
     public static final double kIntakeSpeed = 0.8;
   }

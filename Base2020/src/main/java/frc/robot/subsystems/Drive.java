@@ -72,6 +72,7 @@ public class Drive extends SubsystemBase {
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
+  private boolean updateOdometry = false;
 
   private ShuffleboardTab tab;
   private HashMap<String, NetworkTableEntry> entries;
@@ -186,8 +187,10 @@ public class Drive extends SubsystemBase {
             rightMotorOutput = xSpeed - zRotation;
         }
         }
-        entries.get("LeftInput").setNumber(MathUtil.clamp(leftMotorOutput, -1.0, 1.0) * maxOutput);
-        entries.get("RightInput").setNumber(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
+        if (DriveConstants.testMode) {
+          entries.get("LeftInput").setNumber(MathUtil.clamp(leftMotorOutput, -1.0, 1.0) * maxOutput);
+          entries.get("RightInput").setNumber(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
+        }
         mLeftMaster.set(MathUtil.clamp(leftMotorOutput, -1.0, 1.0) * maxOutput);
         mRightMaster.set(MathUtil.clamp(rightMotorOutput, -1.0, 1.0) * maxOutput);
   }
@@ -334,6 +337,14 @@ public class Drive extends SubsystemBase {
    */
   public double getTurnRate() {
     return navx.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public void enableOdometry() {
+    updateOdometry = true;
+  }
+
+  public void disableOdometry () {
+    updateOdometry = false;
   }
 }
 

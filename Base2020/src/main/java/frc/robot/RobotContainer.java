@@ -27,6 +27,7 @@ import frc.robot.commands.spinner.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.commands.climber.*;
+import frc.robot.commands.groups.*;
 import frc.robot.subsystems.*;
 import frc.robot.Pneumatics;
 
@@ -118,6 +119,7 @@ public class RobotContainer {
 
   public void teleopInit() {
     m_climber.retract();
+    //m_drive.disableOdometry();
   }
 
   public void cameraStreamInit () {
@@ -196,18 +198,20 @@ public class RobotContainer {
       new JoystickButton(c_function1, 10).whenPressed(new ShooterExtend(m_shooter))
           .whenReleased(new ShooterRetract(m_shooter));
       new JoystickButton(c_function1, 2).whileHeld(
-        new ShooterVolts(m_shooter, 9.5/*ShootSpeedConstants.shortShotVolts*/)
+        new ShooterVolts(m_shooter, 12/*ShootSpeedConstants.shortShotVolts*/)
         /*new FeederFixed(m_feeder, -0.3).withTimeout(0.4)
           .andThen(new ShooterVolts(m_shooter, ShootSpeedConstants.shortShotVolts))*/
       );
       //Top left is 4, bottom left is 3
       new JoystickButton(c_function1, 4).whileHeld(
-        new ShooterVolts(m_shooter, ShootSpeedConstants.frontTrenchVolts)
+        new ShooterVelocity(m_shooter, 5580)
+        //new ShooterVolts(m_shooter, ShootSpeedConstants.shortTrenchAutoVolts)
         /*new FeederFixed(m_feeder, -0.3).withTimeout(0.4)
           .andThen(new ShooterVolts(m_shooter, ShootSpeedConstants.frontTrenchVolts))*/
       );
       new JoystickButton(c_function1, 3).whileHeld(
-        new ShooterVolts(m_shooter, 9)//ShootSpeedConstants.farTrenchVolts)
+        new ShooterVelocity(m_shooter, 2830)
+        //new ShooterVolts(m_shooter, 6)//ShootSpeedConstants.farTrenchVolts)
         /*new FeederFixed(m_feeder, -0.3).withTimeout(0.4)
           .andThen(new ShooterVolts(m_shooter, ShootSpeedConstants.farTrenchVolts))*/
       );

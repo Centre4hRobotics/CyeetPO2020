@@ -96,11 +96,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getEncoderPosition () {
-    return encoder.getPosition();
+    return encoder.getPosition()*-1;
   }
 
   public double getEncoderVelocity () {
-    return encoder.getVelocity();
+    return encoder.getVelocity()*-1;
   }
 
   //Can make it so setting individual motors also happens, but seems dangerous
@@ -112,9 +112,10 @@ public class Shooter extends SubsystemBase {
     motor1.setVoltage(-1*volts);
   }
 
-  public void setVelocity (double velocity) {
-    shooterPID.setReference(velocity, ControlType.kVelocity);
-    vel = velocity;
+  public void setVelocity (double rpm) {
+    shooterPID.setReference(-1*rpm, ControlType.kVelocity);
+    System.out.println("RPM: " + rpm);
+    vel = -1*rpm;
   }
 
   public double getVelocity() {
